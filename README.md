@@ -181,10 +181,10 @@ python3 solution.py --benchmark instances/
 
 | Nom | Rôle |
 |-----|------|
-| William HERTRICH | |
-| Théo PLUVINAGE | |
-| Christophe GRILLET-AUBERT | |
-| Ludovic URBES | |
+| William HERTRICH | Lead Developer — Architecture du code, implémentation des structures de données, heuristiques et métaheuristiques |
+| Théo PLUVINAGE | Code Reviewer & Quality Engineer — Validation algorithmique, tests sur instances, analyse des performances et correction des bugs |
+| Christophe GRILLET-AUBERT | Research & Documentation Lead — Rédaction du rapport, formalisation mathématique des algorithmes en pseudo-code et analyse expérimentale |
+| Ludovic URBES | Presentation Architect & Slide Engineer — Conception du support de soutenance, mise en forme des résultats et synthèse orale |
 
 ---
 

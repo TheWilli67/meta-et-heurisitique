@@ -2,7 +2,7 @@
 Problème de couverture maximale sous contrainte de budget
 Master CDSI - Semestre 10
 
-Auteurs : [à compléter]
+Auteurs : William HERTRICH - Théo PLUVINAGE - Christophe GRILLET-AUBERT - Ludovic URBES
 
 Usage :
     python solution.py <fichier_instance>

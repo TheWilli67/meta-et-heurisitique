@@ -1,0 +1,616 @@
+"""
+Problème de couverture maximale sous contrainte de budget
+Master CDSI - Semestre 10
+
+Auteurs : William HERTRICH - Théo PLUVINAGE - Ludovic URBES - Christophe GRILLET-AUBERT
+
+Usage :
+    python solution.py <fichier_instance>
+    python solution.py --all <dossier>
+    python solution.py --benchmark <dossier>
+"""
+
+import sys
+import os
+import random
+import math
+import time
+import glob
+
+
+# ==============================================================================
+# STRUCTURES DE DONNÉES
+# ==============================================================================
+
+class Problem:
+    """
+    Représente une instance du problème de couverture maximale.
+
+    Attributs :
+        n          : nombre de ressources
+        m          : nombre de cibles
+        B          : budget total
+        costs      : liste des coûts (costs[i] = coût de la ressource i)
+        covers     : liste de sets (covers[i] = ensemble des cibles couvertes par i)
+        covered_by : liste de sets (covered_by[j] = ensemble des ressources qui couvrent j)
+        instance_name : nom du fichier (sans extension), utilisé pour le fichier de sortie
+    """
+
+    def __init__(self, filename):
+        self.filename = filename
+        self.instance_name = os.path.splitext(os.path.basename(filename))[0]
+        self._load(filename)
+
+    def _load(self, filename):
+        with open(filename, 'r') as f:
+            # split() gère \r\n et les espaces multiples
+            tokens = f.read().split()
+
+        idx = 0
+        self.n = int(tokens[idx]);   idx += 1
+        self.m = int(tokens[idx]);   idx += 1
+        self.B = float(tokens[idx]); idx += 1
+
+        # Coûts des ressources
+        self.costs = []
+        for _ in range(self.n):
+            self.costs.append(float(tokens[idx])); idx += 1
+
+        # Couverture : covers[i] = set des indices de cibles couvertes par i
+        self.covers = []
+        # Index inverse : covered_by[j] = set des ressources qui couvrent j
+        self.covered_by = [set() for _ in range(self.m)]
+
+        for i in range(self.n):
+            k = int(tokens[idx]); idx += 1
+            targets = set()
+            for _ in range(k):
+                t = int(tokens[idx]); idx += 1
+                targets.add(t)
+            self.covers.append(targets)
+            for t in targets:
+                self.covered_by[t].add(i)
+
+    def __repr__(self):
+        return f"Problem(n={self.n}, m={self.m}, B={self.B})"
+
+
+class Solution:
+    """
+    Représente une solution (sous-ensemble de ressources sélectionnées).
+
+    Attributs :
+        selected    : set des indices de ressources sélectionnées
+        cover_count : cover_count[j] = nb de ressources sélectionnées qui couvrent j
+                      (mis à jour de façon incrémentale — O(k_i) par opération)
+        total_cost  : somme des coûts des ressources sélectionnées
+        num_covered : nb de cibles j telles que cover_count[j] > 0
+    """
+
+    def __init__(self, problem):
+        self.problem = problem
+        self.selected    = set()
+        self.cover_count = [0] * problem.m
+        self.total_cost  = 0.0
+        self.num_covered = 0
+
+    def copy(self):
+        s = Solution(self.problem)
+        s.selected    = self.selected.copy()
+        s.cover_count = self.cover_count.copy()
+        s.total_cost  = self.total_cost
+        s.num_covered = self.num_covered
+        return s
+
+    # --- Prédicats ---
+
+    def is_feasible(self):
+        """Vérifie que la contrainte budgétaire est respectée."""
+        return self.total_cost <= self.problem.B + 1e-9
+
+    def evaluate(self):
+        """
+        Retourne (num_covered, -total_cost) pour la maximisation lexicographique :
+        1er critère : maximiser le nb de cibles couvertes
+        2ème critère : à égalité, minimiser le coût (donc maximiser -coût)
+        """
+        return (self.num_covered, -self.total_cost)
+
+    # --- Opérations élémentaires (mises à jour incrémentales) ---
+
+    def add_resource(self, i):
+        """Ajoute la ressource i. Ne vérifie pas la faisabilité (à faire en amont)."""
+        if i in self.selected:
+            return
+        self.selected.add(i)
+        self.total_cost += self.problem.costs[i]
+        for t in self.problem.covers[i]:
+            if self.cover_count[t] == 0:
+                self.num_covered += 1
+            self.cover_count[t] += 1
+
+    def remove_resource(self, i):
+        """Retire la ressource i."""
+        if i not in self.selected:
+            return
+        self.selected.discard(i)
+        self.total_cost -= self.problem.costs[i]
+        for t in self.problem.covers[i]:
+            self.cover_count[t] -= 1
+            if self.cover_count[t] == 0:
+                self.num_covered -= 1
+
+    # --- Calculs utilitaires ---
+
+    def marginal_coverage(self, i):
+        """Nombre de nouvelles cibles couvertes si on ajoute la ressource i."""
+        return sum(1 for t in self.problem.covers[i] if self.cover_count[t] == 0)
+
+    def coverage_loss(self, i):
+        """Nombre de cibles perdues si on retire la ressource i."""
+        return sum(1 for t in self.problem.covers[i] if self.cover_count[t] == 1)
+
+    def can_add(self, i):
+        """Vérifie qu'on peut ajouter i sans dépasser le budget."""
+        return (i not in self.selected and
+                self.total_cost + self.problem.costs[i] <= self.problem.B + 1e-9)
+
+    # --- Sauvegarde ---
+
+    def save(self, output_dir=None):
+        """
+        Sauvegarde la solution dans sol_<nom_instance>.txt
+        Format :
+            p
+            xi1 xi2 ... xip
+        """
+        name = f"sol_{self.problem.instance_name}.txt"
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
+            path = os.path.join(output_dir, name)
+        else:
+            path = name
+
+        sorted_sel = sorted(self.selected)
+        with open(path, 'w') as f:
+            f.write(f"{len(sorted_sel)}\n")
+            f.write(" ".join(map(str, sorted_sel)) + "\n")
+        return path
+
+    def __repr__(self):
+        return (f"Solution(covered={self.num_covered}/{self.problem.m}, "
+                f"cost={self.total_cost:.2f}/{self.problem.B}, "
+                f"feasible={self.is_feasible()})")
+
+
+# ==============================================================================
+# HEURISTIQUE CONSTRUCTIVE GLOUTONNE
+# ==============================================================================
+
+def greedy_constructive(problem, randomized=False, alpha=0.3):
+    """
+    Construit une solution initiale faisable par approche gloutonne.
+
+    Critère de sélection : ratio couverture_marginale / coût
+    Si randomized=True (pour GRASP) : sélection aléatoire dans une liste
+    restreinte (top alpha*100 % des candidats).
+
+    Complexité : O(n² * k_max) dans le pire cas.
+    En pratique très rapide grâce aux mises à jour incrémentales.
+    """
+    sol = Solution(problem)
+    candidates = list(range(problem.n))  # ressources encore disponibles
+
+    while True:
+        # Filtrer les ressources qui tiennent dans le budget restant
+        admissible = [(i, sol.marginal_coverage(i), problem.costs[i])
+                      for i in candidates if sol.can_add(i)]
+
+        if not admissible:
+            break
+
+        # Ne garder que celles qui améliorent la couverture
+        improving = [(i, mc, c) for i, mc, c in admissible if mc > 0]
+
+        if not improving:
+            break
+
+        # Score = couverture marginale / coût
+        improving.sort(key=lambda x: x[1] / x[2], reverse=True)
+
+        if randomized:
+            # Liste restreinte : les meilleurs alpha% candidats (min 1)
+            limit = max(1, int(len(improving) * alpha))
+            chosen = random.choice(improving[:limit])
+        else:
+            chosen = improving[0]
+
+        i_star = chosen[0]
+        sol.add_resource(i_star)
+        candidates.remove(i_star)
+
+    return sol
+
+
+# ==============================================================================
+# RECHERCHE LOCALE
+# ==============================================================================
+
+def local_search(problem, initial_sol, max_iter=2000):
+    """
+    Améliore une solution par recherche locale.
+
+    Voisinage exploré à chaque itération (dans l'ordre) :
+      1. ADD   : ajouter une ressource qui augmente la couverture
+      2. SWAP  : remplacer une ressource par une autre (meilleur delta)
+      3. REMOVE: retirer une ressource redondante (coverage_loss == 0)
+                 pour libérer du budget → permet des swaps futurs
+
+    Stratégie : first-improve pour ADD/REMOVE, best-improve pour SWAP.
+    S'arrête quand aucun mouvement n'améliore la solution.
+
+    Complexité par itération : O(n²) pour SWAP.
+    """
+    sol = best_sol = initial_sol.copy()
+
+    for _ in range(max_iter):
+        improved = False
+
+        # --- 1. ADD : ajouter la meilleure ressource admissible ---
+        best_add = None
+        best_add_score = (0, 0.0)  # (couverture marginale, -coût)
+
+        for i in range(problem.n):
+            if not sol.can_add(i):
+                continue
+            mc = sol.marginal_coverage(i)
+            if mc == 0:
+                continue
+            score = (mc, -problem.costs[i])
+            if score > best_add_score:
+                best_add_score = score
+                best_add = i
+
+        if best_add is not None:
+            sol.add_resource(best_add)
+            if sol.evaluate() > best_sol.evaluate():
+                best_sol = sol.copy()
+            improved = True
+            continue
+
+        # --- 2. SWAP : remplacer une ressource par une autre ---
+        best_swap      = None
+        best_swap_gain = (0, 0.0)   # (delta_couverture, delta_coût_négatif)
+
+        selected_list  = list(sol.selected)
+        not_selected   = [i for i in range(problem.n) if i not in sol.selected]
+
+        for r in selected_list:
+            loss = sol.coverage_loss(r)
+            for a in not_selected:
+                new_cost = sol.total_cost - problem.costs[r] + problem.costs[a]
+                if new_cost > problem.B + 1e-9:
+                    continue
+                # Gain net en couverture
+                gain = sum(1 for t in problem.covers[a]
+                           if sol.cover_count[t] == 0)
+                # Perte nette : cibles de r uniquement couvertes par r
+                # et pas dans covers[a]
+                net_loss = sum(1 for t in problem.covers[r]
+                               if sol.cover_count[t] == 1
+                               and t not in problem.covers[a])
+                delta_cov  = gain - net_loss
+                delta_cost = problem.costs[r] - problem.costs[a]  # >0 si on économise
+
+                swap_score = (delta_cov, delta_cost)
+                if swap_score > best_swap_gain:
+                    best_swap_gain = swap_score
+                    best_swap = (r, a)
+
+        if best_swap is not None and best_swap_gain > (0, 0.0):
+            r, a = best_swap
+            sol.remove_resource(r)
+            sol.add_resource(a)
+            if sol.evaluate() > best_sol.evaluate():
+                best_sol = sol.copy()
+            improved = True
+            continue
+
+        # --- 3. REMOVE : retirer une ressource redondante ---
+        for r in list(sol.selected):
+            if sol.coverage_loss(r) == 0:
+                sol.remove_resource(r)
+                # Améliore le critère secondaire (moins cher)
+                if sol.evaluate() > best_sol.evaluate():
+                    best_sol = sol.copy()
+                improved = True
+                break
+
+        if not improved:
+            break
+
+    return best_sol
+
+
+# ==============================================================================
+# MÉTAHEURISTIQUE : RECUIT SIMULÉ
+# ==============================================================================
+
+def simulated_annealing(problem, initial_sol,
+                        max_iter=15000,
+                        T_start=50.0,
+                        T_end=0.05,
+                        seed=None):
+    """
+    Recuit simulé (Simulated Annealing).
+
+    Principe :
+      - Génère aléatoirement un voisin (add / remove / swap)
+      - Accepte toujours une amélioration
+      - Accepte une dégradation avec probabilité exp(Δ / T)
+      - La température T décroît géométriquement de T_start à T_end
+
+    Paramètres :
+        max_iter : nombre d'itérations total
+        T_start  : température initiale (contrôle l'exploration initiale)
+        T_end    : température finale (quasi aucune acceptation dégradante)
+        seed     : graine pour reproductibilité
+
+    Complexité : O(max_iter * k_max)
+    """
+    if seed is not None:
+        random.seed(seed)
+
+    sol      = initial_sol.copy()
+    best_sol = sol.copy()
+
+    all_idx = list(range(problem.n))
+
+    for it in range(max_iter):
+        # Décroissance géométrique de la température
+        T = T_start * (T_end / T_start) ** (it / max_iter)
+
+        # --- Choisir un mouvement aléatoire ---
+        move = random.randint(0, 2)
+
+        new_sol = sol.copy()
+        valid   = False
+
+        if move == 0:  # ADD
+            candidates = [i for i in all_idx if new_sol.can_add(i)]
+            if candidates:
+                i = random.choice(candidates)
+                new_sol.add_resource(i)
+                valid = True
+
+        elif move == 1:  # REMOVE
+            if sol.selected:
+                i = random.choice(list(sol.selected))
+                new_sol.remove_resource(i)
+                valid = True
+
+        else:  # SWAP
+            if sol.selected:
+                not_sel = [i for i in all_idx if i not in sol.selected]
+                if not_sel:
+                    r = random.choice(list(sol.selected))
+                    a = random.choice(not_sel)
+                    new_cost = sol.total_cost - problem.costs[r] + problem.costs[a]
+                    if new_cost <= problem.B + 1e-9:
+                        new_sol.remove_resource(r)
+                        new_sol.add_resource(a)
+                        valid = True
+
+        if not valid:
+            continue
+
+        # --- Critère d'acceptation ---
+        cur_cov,  cur_neg_cost  = sol.evaluate()
+        new_cov,  new_neg_cost  = new_sol.evaluate()
+
+        # Delta normalisé sur [−1, +1] (couverture prioritaire)
+        delta = (new_cov - cur_cov) + (new_neg_cost - cur_neg_cost) * 1e-4
+
+        if delta >= 0 or random.random() < math.exp(delta / (T + 1e-12)):
+            sol = new_sol
+
+        if sol.evaluate() > best_sol.evaluate():
+            best_sol = sol.copy()
+
+    return best_sol
+
+
+# ==============================================================================
+# GRASP (bonus : multidémarrage avec glouton randomisé)
+# ==============================================================================
+
+def grasp(problem, n_iter=30, alpha=0.3, ls_iter=500, seed=None):
+    """
+    GRASP : Greedy Randomized Adaptive Search Procedure.
+
+    À chaque itération :
+      1. Construit une solution initiale avec le glouton randomisé
+      2. Améliore avec une recherche locale légère
+      3. Garde la meilleure solution globale
+
+    Paramètres :
+        n_iter  : nombre de redémarrages
+        alpha   : degré de randomisation (0 = glouton pur, 1 = aléatoire pur)
+        ls_iter : nb max d'itérations de recherche locale par redémarrage
+    """
+    if seed is not None:
+        random.seed(seed)
+
+    best_sol = None
+
+    for _ in range(n_iter):
+        sol = greedy_constructive(problem, randomized=True, alpha=alpha)
+        sol = local_search(problem, sol, max_iter=ls_iter)
+        if best_sol is None or sol.evaluate() > best_sol.evaluate():
+            best_sol = sol.copy()
+
+    return best_sol
+
+
+# ==============================================================================
+# PIPELINE DE RÉSOLUTION
+# ==============================================================================
+
+def solve(filename, output_dir=None, verbose=True):
+    """
+    Pipeline complet pour une instance :
+      1. Chargement
+      2. Heuristique gloutonne
+      3. Recherche locale
+      4. Recuit simulé (démarre depuis la meilleure solution courante)
+      5. Sauvegarde de la meilleure solution
+    """
+    t_total = time.time()
+
+    prob = Problem(filename)
+    if verbose:
+        print(f"\n{'─'*55}")
+        print(f"  Instance : {prob.instance_name}")
+        print(f"  n={prob.n} ressources | m={prob.m} cibles | B={prob.B}")
+        print(f"{'─'*55}")
+
+    results = {}
+
+    # 1. Glouton
+    t0 = time.time()
+    sol_greedy = greedy_constructive(prob)
+    results['greedy'] = {
+        'sol': sol_greedy,
+        'time': time.time() - t0,
+        'covered': sol_greedy.num_covered,
+        'cost': sol_greedy.total_cost,
+    }
+    if verbose:
+        pct = 100 * sol_greedy.num_covered / prob.m
+        print(f"  Glouton      : {sol_greedy.num_covered:4d}/{prob.m} cibles "
+              f"({pct:5.1f}%)  coût={sol_greedy.total_cost:7.1f}  "
+              f"[{results['greedy']['time']:.3f}s]")
+
+    # 2. Recherche locale
+    t0 = time.time()
+    sol_ls = local_search(prob, sol_greedy)
+    results['local_search'] = {
+        'sol': sol_ls,
+        'time': time.time() - t0,
+        'covered': sol_ls.num_covered,
+        'cost': sol_ls.total_cost,
+    }
+    if verbose:
+        pct = 100 * sol_ls.num_covered / prob.m
+        print(f"  Rech. locale : {sol_ls.num_covered:4d}/{prob.m} cibles "
+              f"({pct:5.1f}%)  coût={sol_ls.total_cost:7.1f}  "
+              f"[{results['local_search']['time']:.3f}s]")
+
+    # 3. Recuit simulé
+    t0 = time.time()
+    # Adapter le nombre d'itérations à la taille du problème
+    max_it = max(10000, prob.n * prob.m * 3)
+    sol_sa = simulated_annealing(prob, sol_ls, max_iter=max_it)
+    results['simulated_annealing'] = {
+        'sol': sol_sa,
+        'time': time.time() - t0,
+        'covered': sol_sa.num_covered,
+        'cost': sol_sa.total_cost,
+    }
+    if verbose:
+        pct = 100 * sol_sa.num_covered / prob.m
+        print(f"  Recuit simulé: {sol_sa.num_covered:4d}/{prob.m} cibles "
+              f"({pct:5.1f}%)  coût={sol_sa.total_cost:7.1f}  "
+              f"[{results['simulated_annealing']['time']:.3f}s]")
+
+    # Meilleure solution parmi les trois
+    best = max([sol_greedy, sol_ls, sol_sa], key=lambda s: s.evaluate())
+
+    # Sauvegarde
+    out_path = best.save(output_dir=output_dir)
+    elapsed  = time.time() - t_total
+
+    if verbose:
+        pct = 100 * best.num_covered / prob.m
+        print(f"\n  ✓ Meilleure  : {best.num_covered}/{prob.m} cibles "
+              f"({pct:.1f}%)  coût={best.total_cost:.1f}")
+        print(f"  ✓ Sauvegardé : {out_path}  [total {elapsed:.3f}s]")
+
+    return best, results
+
+
+def benchmark(directory, output_dir=None):
+    """
+    Lance solve() sur toutes les instances d'un dossier
+    et affiche un tableau récapitulatif.
+    """
+    files = sorted(glob.glob(os.path.join(directory, "*.txt")))
+    files = [f for f in files if not os.path.basename(f).startswith("sol_")]
+
+    if not files:
+        print(f"Aucune instance trouvée dans {directory}")
+        return
+
+    summary = []
+    for f in files:
+        best, res = solve(f, output_dir=output_dir, verbose=True)
+        prob = best.problem
+        summary.append({
+            'instance': prob.instance_name,
+            'n': prob.n, 'm': prob.m, 'B': prob.B,
+            'greedy':  res['greedy']['covered'],
+            'ls':      res['local_search']['covered'],
+            'sa':      res['simulated_annealing']['covered'],
+            'best':    best.num_covered,
+            'cost':    best.total_cost,
+            't_sa':    res['simulated_annealing']['time'],
+        })
+
+    # Tableau récapitulatif
+    print(f"\n{'═'*80}")
+    print(f"  {'Instance':<22} {'n':>4} {'m':>4} {'B':>6}  "
+          f"{'Glouton':>7} {'RL':>7} {'RecSim':>7}  {'Meilleur':>8}  {'Coût':>8}")
+    print(f"{'─'*80}")
+    for r in summary:
+        print(f"  {r['instance']:<22} {r['n']:>4} {r['m']:>4} {r['B']:>6.0f}  "
+              f"{r['greedy']:>4}/{r['m']:<2} {r['ls']:>4}/{r['m']:<2} {r['sa']:>4}/{r['m']:<2}  "
+              f"{r['best']:>4}/{r['m']:<3}  {r['cost']:>8.1f}")
+    print(f"{'═'*80}")
+
+
+# ==============================================================================
+# POINT D'ENTRÉE
+# ==============================================================================
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print(__doc__)
+        print("Exemples :")
+        print("  python solution.py inst10_20_0.txt")
+        print("  python solution.py --all ./instances/")
+        print("  python solution.py --benchmark ./instances/")
+        sys.exit(1)
+
+    mode = sys.argv[1]
+
+    if mode == "--all" and len(sys.argv) >= 3:
+        directory = sys.argv[2]
+        out_dir   = sys.argv[3] if len(sys.argv) >= 4 else None
+        files     = sorted(glob.glob(os.path.join(directory, "*.txt")))
+        files     = [f for f in files if not os.path.basename(f).startswith("sol_")]
+        for f in files:
+            solve(f, output_dir=out_dir)
+
+    elif mode == "--benchmark" and len(sys.argv) >= 3:
+        directory = sys.argv[2]
+        out_dir   = sys.argv[3] if len(sys.argv) >= 4 else None
+        benchmark(directory, output_dir=out_dir)
+
+    else:
+        # Mode simple : un seul fichier
+        filename = sys.argv[1]
+        out_dir  = sys.argv[2] if len(sys.argv) >= 3 else None
+        if not os.path.exists(filename):
+            print(f"Erreur : fichier introuvable : {filename}")
+            sys.exit(1)
+        solve(filename, output_dir=out_dir)

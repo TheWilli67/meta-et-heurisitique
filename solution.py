@@ -2,7 +2,7 @@
 Problème de couverture maximale sous contrainte de budget
 Master CDSI - Semestre 10
 
-Auteurs : William HERTRICH - Théo PLUVINAGE - Ludovic URBES - Christophe GRILLET-AUBERT
+Auteurs : [à compléter]
 
 Usage :
     python solution.py <fichier_instance>
@@ -582,35 +582,90 @@ def benchmark(directory, output_dir=None):
 # POINT D'ENTRÉE
 # ==============================================================================
 
+HELP_TEXT = """
+Usage : python3 solution.py [OPTION] [ARGUMENT]
+
+Options :
+  <fichier>              Résoudre une instance et sauvegarder la solution
+                           Ex : python3 solution.py inst10_20_0.txt
+
+  --all <dossier>        Résoudre toutes les instances d'un dossier
+                           Ex : python3 solution.py --all ./instances/
+
+  --benchmark <dossier>  Comme --all, mais affiche un tableau récapitulatif
+                         des résultats (couverture et coût par algorithme)
+                           Ex : python3 solution.py --benchmark ./instances/
+
+  --reset-all            Supprimer le dossier de solutions ({SOL_DIR}/)
+                         et tout son contenu
+                           Ex : python3 solution.py --reset-all
+
+  -h, --help             Afficher ce message d'aide
+
+Dossier de sortie :
+  Les fichiers de solution sont automatiquement créés dans ./{SOL_DIR}/
+  Format du fichier : sol_<nom_instance>.txt
+  Contenu :
+    Ligne 1 — nombre de ressources sélectionnées
+    Ligne 2 — indices des ressources sélectionnées (séparés par espaces)
+"""
+
+SOL_DIR = "sol_instances"
+
+
+def print_help():
+    print(HELP_TEXT.replace("{SOL_DIR}", SOL_DIR))
+
+
+def reset_solutions():
+    import shutil
+    if os.path.isdir(SOL_DIR):
+        shutil.rmtree(SOL_DIR)
+        print(f"  ✓ Dossier '{SOL_DIR}/' supprimé.")
+    else:
+        print(f"  Rien à supprimer : le dossier '{SOL_DIR}/' n'existe pas.")
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(__doc__)
-        print("Exemples :")
-        print("  python solution.py inst10_20_0.txt")
-        print("  python solution.py --all ./instances/")
-        print("  python solution.py --benchmark ./instances/")
-        sys.exit(1)
+    if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
+        print_help()
+        sys.exit(0)
 
     mode = sys.argv[1]
 
-    if mode == "--all" and len(sys.argv) >= 3:
-        directory = sys.argv[2]
-        out_dir   = sys.argv[3] if len(sys.argv) >= 4 else None
-        files     = sorted(glob.glob(os.path.join(directory, "*.txt")))
-        files     = [f for f in files if not os.path.basename(f).startswith("sol_")]
-        for f in files:
-            solve(f, output_dir=out_dir)
+    if mode == "--reset-all":
+        reset_solutions()
 
-    elif mode == "--benchmark" and len(sys.argv) >= 3:
+    elif mode == "--all":
+        if len(sys.argv) < 3:
+            print("Erreur : --all attend un dossier en argument.")
+            print("  Ex : python3 solution.py --all ./instances/")
+            sys.exit(1)
         directory = sys.argv[2]
-        out_dir   = sys.argv[3] if len(sys.argv) >= 4 else None
-        benchmark(directory, output_dir=out_dir)
+        files = sorted(glob.glob(os.path.join(directory, "*.txt")))
+        files = [f for f in files if not os.path.basename(f).startswith("sol_")]
+        if not files:
+            print(f"Aucune instance trouvée dans '{directory}'")
+            sys.exit(1)
+        for f in files:
+            solve(f, output_dir=SOL_DIR)
+
+    elif mode == "--benchmark":
+        if len(sys.argv) < 3:
+            print("Erreur : --benchmark attend un dossier en argument.")
+            print("  Ex : python3 solution.py --benchmark ./instances/")
+            sys.exit(1)
+        directory = sys.argv[2]
+        benchmark(directory, output_dir=SOL_DIR)
 
     else:
         # Mode simple : un seul fichier
         filename = sys.argv[1]
-        out_dir  = sys.argv[2] if len(sys.argv) >= 3 else None
-        if not os.path.exists(filename):
-            print(f"Erreur : fichier introuvable : {filename}")
+        if filename.startswith("--"):
+            print(f"Option inconnue : '{filename}'")
+            print("  Utilisez -h ou --help pour voir les options disponibles.")
             sys.exit(1)
-        solve(filename, output_dir=out_dir)
+        if not os.path.exists(filename):
+            print(f"Erreur : fichier introuvable : '{filename}'")
+            sys.exit(1)
+        solve(filename, output_dir=SOL_DIR)

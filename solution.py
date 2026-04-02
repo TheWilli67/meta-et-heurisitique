@@ -8,6 +8,9 @@ Usage :
     python solution.py <fichier_instance>
     python solution.py --all <dossier>
     python solution.py --benchmark <dossier>
+    python solution.py --grasp <fichier_instance>
+    python solution.py --reset-all
+    python solution.py -h|--help
 """
 
 import sys
@@ -143,12 +146,30 @@ class Solution:
     # --- Calculs utilitaires ---
 
     def marginal_coverage(self, i):
-        """Nombre de nouvelles cibles couvertes si on ajoute la ressource i."""
+        """
+        Nombre de nouvelles cibles couvertes si on ajoute la ressource i.
+        On parcourt covers[i] et on compte les cibles dont cover_count == 0.
+        Complexité : O(k_i)
+        """
         return sum(1 for t in self.problem.covers[i] if self.cover_count[t] == 0)
 
     def coverage_loss(self, i):
-        """Nombre de cibles perdues si on retire la ressource i."""
+        """
+        Nombre de cibles perdues si on retire la ressource i.
+        Une cible est perdue uniquement si cover_count[t] == 1
+        (i est la seule ressource sélectionnée qui la couvre).
+        Complexité : O(k_i)
+        """
         return sum(1 for t in self.problem.covers[i] if self.cover_count[t] == 1)
+
+    def uncovered_targets(self):
+        """
+        Retourne l'ensemble des indices de cibles pas encore couvertes.
+        Utilisé dans le glouton via covered_by pour ne considérer
+        que les ressources pertinentes (celles qui couvrent une cible manquante).
+        Complexité : O(m)
+        """
+        return {t for t in range(self.problem.m) if self.cover_count[t] == 0}
 
     def can_add(self, i):
         """Vérifie qu'on peut ajouter i sans dépasser le budget."""
@@ -191,43 +212,58 @@ def greedy_constructive(problem, randomized=False, alpha=0.3):
     """
     Construit une solution initiale faisable par approche gloutonne.
 
-    Critère de sélection : ratio couverture_marginale / coût
-    Si randomized=True (pour GRASP) : sélection aléatoire dans une liste
-    restreinte (top alpha*100 % des candidats).
+    Critère de sélection : ratio couverture_marginale / coût.
+    Si randomized=True (pour GRASP) : sélection dans les meilleurs alpha%.
 
-    Complexité : O(n² * k_max) dans le pire cas.
-    En pratique très rapide grâce aux mises à jour incrémentales.
+    Utilisation de covered_by :
+      À chaque étape, on identifie les cibles non couvertes, puis on remonte
+      via covered_by[t] pour ne considérer QUE les ressources qui couvrent
+      au moins une cible manquante. Cela évite de calculer marginal_coverage
+      sur des ressources qui n'apporteraient rien.
+
+    Complexité : O(n * k_max) par étape au lieu de O(n² * k_max).
     """
-    sol = Solution(problem)
-    candidates = list(range(problem.n))  # ressources encore disponibles
+    sol        = Solution(problem)
+    candidates = set(range(problem.n))
 
     while True:
-        # Filtrer les ressources qui tiennent dans le budget restant
-        admissible = [(i, sol.marginal_coverage(i), problem.costs[i])
-                      for i in candidates if sol.can_add(i)]
+        # --- Étape 1 : trouver les cibles non encore couvertes ---
+        uncovered = sol.uncovered_targets()
+        if not uncovered:
+            break  # toutes les cibles sont couvertes
 
-        if not admissible:
-            break
+        # --- Étape 2 : via covered_by, trouver les ressources pertinentes ---
+        # On ne calcule le score QUE pour les ressources qui couvrent
+        # au moins une cible manquante (les autres ont marginal_coverage == 0)
+        relevant = set()
+        for t in uncovered:
+            relevant |= problem.covered_by[t]  # union des ressources utiles
+        relevant &= candidates                  # parmi celles pas encore ajoutées
 
-        # Ne garder que celles qui améliorent la couverture
-        improving = [(i, mc, c) for i, mc, c in admissible if mc > 0]
+        # --- Étape 3 : filtrer par budget et calculer les scores ---
+        improving = []
+        for i in relevant:
+            if not sol.can_add(i):
+                continue
+            mc = sol.marginal_coverage(i)  # nb de nouvelles cibles couvertes
+            if mc > 0:
+                improving.append((i, mc, problem.costs[i]))
 
         if not improving:
             break
 
-        # Score = couverture marginale / coût
+        # --- Étape 4 : trier par ratio couverture marginale / coût ---
         improving.sort(key=lambda x: x[1] / x[2], reverse=True)
 
         if randomized:
-            # Liste restreinte : les meilleurs alpha% candidats (min 1)
-            limit = max(1, int(len(improving) * alpha))
+            # GRASP : choisir aléatoirement parmi les meilleurs alpha%
+            limit  = max(1, int(len(improving) * alpha))
             chosen = random.choice(improving[:limit])
         else:
             chosen = improving[0]
 
-        i_star = chosen[0]
-        sol.add_resource(i_star)
-        candidates.remove(i_star)
+        sol.add_resource(chosen[0])
+        candidates.discard(chosen[0])
 
     return sol
 
@@ -456,14 +492,22 @@ def grasp(problem, n_iter=30, alpha=0.3, ls_iter=500, seed=None):
 # PIPELINE DE RÉSOLUTION
 # ==============================================================================
 
-def solve(filename, output_dir=None, verbose=True):
+def solve(filename, output_dir=None, verbose=True, n_runs=3, base_seed=42):
     """
-    Pipeline complet pour une instance :
-      1. Chargement
-      2. Heuristique gloutonne
-      3. Recherche locale
-      4. Recuit simulé (démarre depuis la meilleure solution courante)
-      5. Sauvegarde de la meilleure solution
+    Pipeline complet pour une instance.
+
+    Étapes :
+      1. Chargement de l'instance
+      2. Heuristique gloutonne (déterministe)
+      3. Recherche locale (déterministe)
+      4. Recuit simulé — lancé n_runs fois avec des seeds différentes
+         pour la reproductibilité et la mesure de stabilité
+      5. GRASP — lancé en parallèle des runs SA
+      6. Sauvegarde de la meilleure solution toutes méthodes confondues
+
+    Paramètres :
+        n_runs    : nombre de runs du recuit simulé (pour stats de stabilité)
+        base_seed : seed de base ; le run k utilise la seed base_seed + k
     """
     t_total = time.time()
 
@@ -475,15 +519,14 @@ def solve(filename, output_dir=None, verbose=True):
         print(f"{'─'*55}")
 
     results = {}
+    max_it  = max(10000, prob.n * prob.m * 3)
 
-    # 1. Glouton
-    t0 = time.time()
+    # ── 1. Glouton ────────────────────────────────────────────
+    t0         = time.time()
     sol_greedy = greedy_constructive(prob)
     results['greedy'] = {
-        'sol': sol_greedy,
-        'time': time.time() - t0,
-        'covered': sol_greedy.num_covered,
-        'cost': sol_greedy.total_cost,
+        'sol': sol_greedy, 'time': time.time() - t0,
+        'covered': sol_greedy.num_covered, 'cost': sol_greedy.total_cost,
     }
     if verbose:
         pct = 100 * sol_greedy.num_covered / prob.m
@@ -491,14 +534,12 @@ def solve(filename, output_dir=None, verbose=True):
               f"({pct:5.1f}%)  coût={sol_greedy.total_cost:7.1f}  "
               f"[{results['greedy']['time']:.3f}s]")
 
-    # 2. Recherche locale
-    t0 = time.time()
+    # ── 2. Recherche locale ───────────────────────────────────
+    t0     = time.time()
     sol_ls = local_search(prob, sol_greedy)
     results['local_search'] = {
-        'sol': sol_ls,
-        'time': time.time() - t0,
-        'covered': sol_ls.num_covered,
-        'cost': sol_ls.total_cost,
+        'sol': sol_ls, 'time': time.time() - t0,
+        'covered': sol_ls.num_covered, 'cost': sol_ls.total_cost,
     }
     if verbose:
         pct = 100 * sol_ls.num_covered / prob.m
@@ -506,27 +547,59 @@ def solve(filename, output_dir=None, verbose=True):
               f"({pct:5.1f}%)  coût={sol_ls.total_cost:7.1f}  "
               f"[{results['local_search']['time']:.3f}s]")
 
-    # 3. Recuit simulé
-    t0 = time.time()
-    # Adapter le nombre d'itérations à la taille du problème
-    max_it = max(10000, prob.n * prob.m * 3)
-    sol_sa = simulated_annealing(prob, sol_ls, max_iter=max_it)
+    # ── 3. Recuit simulé (n_runs fois, seeds fixes) ───────────
+    sa_covered_list = []
+    sa_cost_list    = []
+    best_sa         = None
+    t0              = time.time()
+
+    for k in range(n_runs):
+        seed_k = base_seed + k
+        sol_k  = simulated_annealing(prob, sol_ls, max_iter=max_it, seed=seed_k)
+        sa_covered_list.append(sol_k.num_covered)
+        sa_cost_list.append(sol_k.total_cost)
+        if best_sa is None or sol_k.evaluate() > best_sa.evaluate():
+            best_sa = sol_k
+
+    t_sa = time.time() - t0
+    sa_mean_cov  = sum(sa_covered_list) / n_runs
+    sa_std_cov   = (sum((x - sa_mean_cov)**2 for x in sa_covered_list) / n_runs) ** 0.5
+    sa_mean_cost = sum(sa_cost_list) / n_runs
+
     results['simulated_annealing'] = {
-        'sol': sol_sa,
-        'time': time.time() - t0,
-        'covered': sol_sa.num_covered,
-        'cost': sol_sa.total_cost,
+        'sol': best_sa, 'time': t_sa,
+        'covered': best_sa.num_covered, 'cost': best_sa.total_cost,
+        'mean_covered': sa_mean_cov, 'std_covered': sa_std_cov,
+        'mean_cost': sa_mean_cost, 'n_runs': n_runs,
     }
     if verbose:
-        pct = 100 * sol_sa.num_covered / prob.m
-        print(f"  Recuit simulé: {sol_sa.num_covered:4d}/{prob.m} cibles "
-              f"({pct:5.1f}%)  coût={sol_sa.total_cost:7.1f}  "
-              f"[{results['simulated_annealing']['time']:.3f}s]")
+        pct = 100 * best_sa.num_covered / prob.m
+        print(f"  Recuit simulé: {best_sa.num_covered:4d}/{prob.m} cibles "
+              f"({pct:5.1f}%)  coût={best_sa.total_cost:7.1f}  "
+              f"[{t_sa:.3f}s × {n_runs} runs]")
+        print(f"               moy={sa_mean_cov:.1f} cibles  "
+              f"écart-type={sa_std_cov:.2f}  coût moy={sa_mean_cost:.1f}")
 
-    # Meilleure solution parmi les trois
-    best = max([sol_greedy, sol_ls, sol_sa], key=lambda s: s.evaluate())
+    # ── 4. GRASP ──────────────────────────────────────────────
+    t0       = time.time()
+    sol_gsp  = grasp(prob, n_iter=20, alpha=0.3, ls_iter=500, seed=base_seed)
+    t_grasp  = time.time() - t0
+    results['grasp'] = {
+        'sol': sol_gsp, 'time': t_grasp,
+        'covered': sol_gsp.num_covered, 'cost': sol_gsp.total_cost,
+    }
+    if verbose:
+        pct = 100 * sol_gsp.num_covered / prob.m
+        print(f"  GRASP        : {sol_gsp.num_covered:4d}/{prob.m} cibles "
+              f"({pct:5.1f}%)  coût={sol_gsp.total_cost:7.1f}  "
+              f"[{t_grasp:.3f}s]")
 
-    # Sauvegarde
+    # ── 5. Meilleure solution toutes méthodes ─────────────────
+    best = max(
+        [sol_greedy, sol_ls, best_sa, sol_gsp],
+        key=lambda s: s.evaluate()
+    )
+
     out_path = best.save(output_dir=output_dir)
     elapsed  = time.time() - t_total
 
@@ -561,21 +634,24 @@ def benchmark(directory, output_dir=None):
             'greedy':  res['greedy']['covered'],
             'ls':      res['local_search']['covered'],
             'sa':      res['simulated_annealing']['covered'],
+            'grasp':   res['grasp']['covered'],
             'best':    best.num_covered,
             'cost':    best.total_cost,
-            't_sa':    res['simulated_annealing']['time'],
+            'std_cov': res['simulated_annealing']['std_covered'],
         })
 
     # Tableau récapitulatif
-    print(f"\n{'═'*80}")
+    print(f"\n{'═'*90}")
     print(f"  {'Instance':<22} {'n':>4} {'m':>4} {'B':>6}  "
-          f"{'Glouton':>7} {'RL':>7} {'RecSim':>7}  {'Meilleur':>8}  {'Coût':>8}")
-    print(f"{'─'*80}")
+          f"{'Glouton':>7} {'RL':>7} {'RecSim':>7} {'GRASP':>7}  "
+          f"{'Meilleur':>8}  {'Coût':>8}  {'σ cov':>6}")
+    print(f"{'─'*90}")
     for r in summary:
         print(f"  {r['instance']:<22} {r['n']:>4} {r['m']:>4} {r['B']:>6.0f}  "
-              f"{r['greedy']:>4}/{r['m']:<2} {r['ls']:>4}/{r['m']:<2} {r['sa']:>4}/{r['m']:<2}  "
-              f"{r['best']:>4}/{r['m']:<3}  {r['cost']:>8.1f}")
-    print(f"{'═'*80}")
+              f"{r['greedy']:>4}/{r['m']:<2} {r['ls']:>4}/{r['m']:<2} "
+              f"{r['sa']:>4}/{r['m']:<2} {r['grasp']:>4}/{r['m']:<2}  "
+              f"{r['best']:>4}/{r['m']:<3}  {r['cost']:>8.1f}  {r['std_cov']:>6.2f}")
+    print(f"{'═'*90}")
 
 
 # ==============================================================================
@@ -593,21 +669,27 @@ Options :
                            Ex : python3 solution.py --all ./instances/
 
   --benchmark <dossier>  Comme --all, mais affiche un tableau récapitulatif
-                         des résultats (couverture et coût par algorithme)
+                         comparant Glouton / Rech. locale / Recuit simulé / GRASP
                            Ex : python3 solution.py --benchmark ./instances/
 
+  --grasp <fichier>      Résoudre une instance avec GRASP uniquement
+                         (multidémarrage glouton randomisé + recherche locale)
+                           Ex : python3 solution.py --grasp inst50_30_2.txt
+
   --reset-all            Supprimer le dossier de solutions ({SOL_DIR}/)
-                         et tout son contenu
                            Ex : python3 solution.py --reset-all
 
   -h, --help             Afficher ce message d'aide
 
 Dossier de sortie :
-  Les fichiers de solution sont automatiquement créés dans ./{SOL_DIR}/
-  Format du fichier : sol_<nom_instance>.txt
-  Contenu :
+  Les fichiers de solution sont créés dans ./{SOL_DIR}/
+  Format : sol_<nom_instance>.txt
     Ligne 1 — nombre de ressources sélectionnées
-    Ligne 2 — indices des ressources sélectionnées (séparés par espaces)
+    Ligne 2 — indices des ressources (séparés par espaces)
+
+Reproductibilité :
+  Le recuit simulé est lancé 3 fois avec des seeds fixes (42, 43, 44).
+  Les résultats sont donc identiques d'un run à l'autre.
 """
 
 SOL_DIR = "sol_instances"
@@ -649,6 +731,27 @@ if __name__ == "__main__":
             sys.exit(1)
         for f in files:
             solve(f, output_dir=SOL_DIR)
+
+    elif mode == "--grasp":
+        if len(sys.argv) < 3:
+            print("Erreur : --grasp attend un fichier en argument.")
+            print("  Ex : python3 solution.py --grasp inst50_30_2.txt")
+            sys.exit(1)
+        filename = sys.argv[2]
+        if not os.path.exists(filename):
+            print(f"Erreur : fichier introuvable : '{filename}'")
+            sys.exit(1)
+        prob    = Problem(filename)
+        print(f"\n  GRASP sur {prob.instance_name}  "
+              f"(n={prob.n}, m={prob.m}, B={prob.B})")
+        t0      = time.time()
+        sol     = grasp(prob, n_iter=50, alpha=0.3, ls_iter=800, seed=42)
+        elapsed = time.time() - t0
+        pct     = 100 * sol.num_covered / prob.m
+        print(f"  Résultat : {sol.num_covered}/{prob.m} cibles "
+              f"({pct:.1f}%)  coût={sol.total_cost:.1f}  [{elapsed:.3f}s]")
+        out = sol.save(output_dir=SOL_DIR)
+        print(f"  Sauvegardé : {out}")
 
     elif mode == "--benchmark":
         if len(sys.argv) < 3:

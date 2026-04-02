@@ -1,2 +1,191 @@
-# OUTILS AVANCES POUR LA SECURITE
- TP Problème Heuristique Métaheuristique
+# Problème de Couverture Maximale sous Contrainte de Budget
+
+> Master Cyber-défense et Sécurité de l'Information — Semestre 10  
+> Université Polytechnique Hauts-de-France · INSA Hauts-de-France  
+> Module : Complexité, Heuristiques & Métaheuristiques
+
+---
+
+## Contexte
+
+Dans de nombreux scénarios de cyberdéfense, il est nécessaire de déployer un nombre limité de ressources de surveillance — sondes IDS, règles de filtrage, outils d'analyse de vulnérabilités — afin de couvrir un ensemble de cibles critiques (serveurs, ports, segments réseau). Le déploiement est contraint par un **budget** : il est impossible d'activer toutes les ressources disponibles.
+
+Ce projet implémente et compare plusieurs algorithmes pour résoudre ce problème d'optimisation combinatoire, connu pour être **NP-difficile**.
+
+---
+
+## Formulation du problème
+
+Étant donné :
+- $U = \{u_1, \dots, u_m\}$ — un ensemble de **m cibles** à couvrir
+- $S = \{S_1, \dots, S_n\}$ — un ensemble de **n ressources**, chacune couvrant un sous-ensemble de cibles
+- $c_i > 0$ — le coût d'activation de la ressource $S_i$
+- $B > 0$ — le budget total disponible
+
+On cherche à sélectionner un sous-ensemble de ressources qui **maximise la couverture** tout en respectant le budget, avec un **objectif lexicographique** :
+
+$$\max\left(\sum_{j=1}^{m} y_j,\ -\sum_{i=1}^{n} c_i x_i\right)$$
+
+1. **Critère principal** : maximiser le nombre de cibles couvertes
+2. **Critère secondaire** : à égalité, minimiser le coût total
+
+---
+
+## Algorithmes implémentés
+
+### 1. Heuristique constructive gloutonne
+Construction itérative d'une solution en sélectionnant à chaque étape la ressource admissible maximisant le ratio **couverture marginale / coût**. Utilise l'index inverse `covered_by` pour ne considérer que les ressources pertinentes.
+
+### 2. Recherche locale
+Amélioration par exploration de voisinage avec trois types de mouvements :
+- **ADD** — ajouter une ressource qui couvre de nouvelles cibles
+- **SWAP** — remplacer une ressource par une meilleure (best-improve)
+- **REMOVE** — retirer une ressource redondante pour réduire le coût
+
+### 3. Recuit simulé *(métaheuristique)*
+Acceptation probabiliste de solutions dégradantes pour échapper aux optima locaux. La température décroît géométriquement de $T_{start}$ à $T_{end}$. Lancé **3 fois** avec des seeds fixes (42, 43, 44) pour la reproductibilité.
+
+### 4. GRASP *(métaheuristique bonus)*
+*Greedy Randomized Adaptive Search Procedure* — multidémarrage combinant un glouton randomisé (sélection dans les meilleurs $\alpha$% candidats) et une recherche locale. Permet d'explorer des régions de l'espace de solutions inaccessibles au glouton déterministe.
+
+---
+
+## Structure du projet
+
+```
+.
+├── solution.py          # Code source principal
+├── instances/           # Fichiers d'instances (.txt)
+│   ├── inst10_20_0.txt
+│   ├── inst15_30_0.txt
+│   └── ...
+├── sol_instances/       # Solutions générées (créé automatiquement)
+│   ├── sol_inst10_20_0.txt
+│   └── ...
+├── inst_test_budget.txt # Instance de test : couverture totale impossible
+└── README.md
+```
+
+---
+
+## Installation
+
+Aucune dépendance externe. Python 3.8+ suffit.
+
+```bash
+git clone https://github.com/<votre-repo>/max-coverage.git
+cd max-coverage
+python3 solution.py --help
+```
+
+---
+
+## Utilisation
+
+```bash
+# Résoudre une instance
+python3 solution.py instances/inst30_50_1.txt
+
+# Résoudre toutes les instances d'un dossier
+python3 solution.py --all instances/
+
+# Benchmark comparatif (tableau récapitulatif)
+python3 solution.py --benchmark instances/
+
+# GRASP uniquement sur une instance
+python3 solution.py --grasp instances/inst90_50_2.txt
+
+# Supprimer les fichiers de solutions générés
+python3 solution.py --reset-all
+```
+
+### Format d'entrée
+
+```
+n m B
+c_1 c_2 ... c_n
+k_1 u_11 u_12 ...
+k_2 u_21 u_22 ...
+...
+```
+
+| Symbole | Signification |
+|---------|--------------|
+| `n` | Nombre de ressources |
+| `m` | Nombre de cibles |
+| `B` | Budget total |
+| `c_i` | Coût de la ressource i |
+| `k_i` | Nombre de cibles couvertes par i |
+| `u_ij` | Indice (base 0) d'une cible couverte par i |
+
+### Format de sortie
+
+```
+p
+xi1 xi2 ... xip
+```
+
+Ligne 1 : nombre de ressources sélectionnées  
+Ligne 2 : indices des ressources sélectionnées  
+Nom du fichier : `sol_<nom_instance>.txt`
+
+---
+
+## Résultats expérimentaux
+
+Résultats obtenus sur les 12 instances fournies (seeds fixes, machine locale) :
+
+| Instance | n | m | B | Glouton | Rech. locale | Rec. simulé | GRASP | **Meilleur** | Coût |
+|---|---|---|---|---|---|---|---|---|---|
+| inst10_20_0 | 10 | 20 | 80 | 20/20 | 20/20 | 20/20 | 20/20 | **20/20** | 62.0 |
+| inst15_30_0 | 15 | 30 | 120 | 30/30 | 30/30 | 30/30 | 30/30 | **30/30** | 95.0 |
+| inst20_30_1 | 20 | 30 | 150 | 30/30 | 30/30 | 30/30 | 30/30 | **30/30** | 106.0 |
+| inst20_40_0 | 20 | 40 | 140 | 40/40 | 40/40 | 40/40 | 40/40 | **40/40** | 104.0 |
+| inst30_50_1 | 30 | 50 | 150 | 50/50 | 50/50 | 50/50 | 50/50 | **50/50** | 92.0 |
+| inst30_80_0 | 30 | 80 | 240 | 80/80 | 80/80 | 80/80 | 80/80 | **80/80** | 168.0 |
+| inst50_30_2 | 50 | 30 | 200 | 29/30 | 29/30 | 29/30 | 29/30 | **29/30** | 175.0 |
+| inst50_80_1 | 50 | 80 | 250 | 80/80 | 80/80 | 80/80 | 80/80 | **80/80** | 133.0 |
+| inst60_90_1 | 60 | 90 | 250 | 90/90 | 90/90 | 90/90 | 90/90 | **90/90** | 99.0 |
+| inst70_40_2 | 70 | 40 | 200 | 40/40 | 40/40 | 40/40 | 40/40 | **40/40** | 187.0 |
+| inst90_50_2 | 90 | 50 | 270 | 49/50 | 50/50 | 50/50 | 50/50 | **50/50** | 244.0 |
+| inst150_120_2 | 150 | 120 | 450 | 120/120 | 120/120 | 120/120 | 120/120 | **120/120** | 228.0 |
+
+> 11/12 instances couvertes à 100%. L'instance `inst50_30_2` atteint 29/30 (96.7%) — la cible manquante est mathématiquement inatteignable avec le budget disponible quelle que soit la combinaison choisie.
+
+> Le recuit simulé est lancé 3 fois par instance (seeds 42, 43, 44). Écart-type observé = 0.00 sur toutes les instances → résultats stables et reproductibles.
+
+---
+
+## Reproductibilité
+
+Tous les algorithmes aléatoires utilisent des seeds fixes. Les résultats sont identiques à chaque exécution.
+
+```bash
+# Résultats identiques à chaque appel
+python3 solution.py --benchmark instances/
+```
+
+---
+
+## Choix techniques notables
+
+**Mises à jour incrémentales** — le compteur `cover_count[j]` est maintenu en temps réel. Ajouter ou retirer une ressource coûte O(k_i) au lieu de O(n×m), ce qui rend les algorithmes d'amélioration viables sur les grandes instances.
+
+**Index inverse `covered_by`** — utilisé dans le glouton pour ne calculer le score que des ressources couvrant au moins une cible manquante, évitant un parcours inutile de toutes les ressources.
+
+**Objectif lexicographique via tuple** — `evaluate()` retourne `(num_covered, -total_cost)`. Python compare les tuples élément par élément, ce qui implémente naturellement la priorité couverture > coût sans code supplémentaire.
+
+---
+
+## Auteurs
+
+| Nom | Rôle |
+|-----|------|
+| William HERTRICH | |
+| Théo PLUVINAGE | |
+| Christophe GRILLET-AUBERT | |
+| Ludovic URBES | |
+
+---
+
+*Master CDSI · UPHF / INSA HdF · 2025-2026*

@@ -612,10 +612,14 @@ def solve(filename, output_dir=None, verbose=True, n_runs=3, base_seed=42):
     return best, results
 
 
+BENCHMARK_FILE = "benchmark_results.txt"
+
+
 def benchmark(directory, output_dir=None):
     """
-    Lance solve() sur toutes les instances d'un dossier
-    et affiche un tableau récapitulatif.
+    Lance solve() sur toutes les instances d'un dossier,
+    affiche le tableau récapitulatif dans le terminal
+    ET l'écrit dans benchmark_results.txt (écrasé à chaque run).
     """
     files = sorted(glob.glob(os.path.join(directory, "*.txt")))
     files = [f for f in files if not os.path.basename(f).startswith("sol_")]
@@ -638,20 +642,75 @@ def benchmark(directory, output_dir=None):
             'best':    best.num_covered,
             'cost':    best.total_cost,
             'std_cov': res['simulated_annealing']['std_covered'],
+            't_greedy': res['greedy']['time'],
+            't_ls':     res['local_search']['time'],
+            't_sa':     res['simulated_annealing']['time'],
+            't_grasp':  res['grasp']['time'],
         })
 
-    # Tableau récapitulatif
-    print(f"\n{'═'*90}")
-    print(f"  {'Instance':<22} {'n':>4} {'m':>4} {'B':>6}  "
-          f"{'Glouton':>7} {'RL':>7} {'RecSim':>7} {'GRASP':>7}  "
-          f"{'Meilleur':>8}  {'Coût':>8}  {'σ cov':>6}")
-    print(f"{'─'*90}")
+    # ── Construire les lignes du tableau ─────────────────────
+    header = (
+        f"  {'Instance':<22} {'n':>4} {'m':>4} {'B':>6}  "
+        f"{'Glouton':>8} {'RL':>8} {'RecSim':>8} {'GRASP':>8}  "
+        f"{'Meilleur':>8}  {'Coût':>8}  {'σ cov':>6}"
+    )
+    sep_double = '═' * 92
+    sep_single = '─' * 92
+
+    rows = []
     for r in summary:
-        print(f"  {r['instance']:<22} {r['n']:>4} {r['m']:>4} {r['B']:>6.0f}  "
-              f"{r['greedy']:>4}/{r['m']:<2} {r['ls']:>4}/{r['m']:<2} "
-              f"{r['sa']:>4}/{r['m']:<2} {r['grasp']:>4}/{r['m']:<2}  "
-              f"{r['best']:>4}/{r['m']:<3}  {r['cost']:>8.1f}  {r['std_cov']:>6.2f}")
-    print(f"{'═'*90}")
+        g   = f"{r['greedy']}/{r['m']}"
+        ls  = f"{r['ls']}/{r['m']}"
+        sa  = f"{r['sa']}/{r['m']}"
+        gp  = f"{r['grasp']}/{r['m']}"
+        bst = f"{r['best']}/{r['m']}"
+        rows.append(
+            f"  {r['instance']:<22} {r['n']:>4} {r['m']:>4} {r['B']:>6.0f}  "
+            f"{g:>8} {ls:>8} {sa:>8} {gp:>8}  "
+            f"{bst:>8}  {r['cost']:>8.1f}  {r['std_cov']:>6.2f}"
+        )
+
+    # Lignes de temps d'exécution par instance
+    time_rows = []
+    for r in summary:
+        time_rows.append(
+            f"  {r['instance']:<22}  "
+            f"Glouton={r['t_greedy']:.3f}s  "
+            f"RL={r['t_ls']:.3f}s  "
+            f"RecSim={r['t_sa']:.3f}s  "
+            f"GRASP={r['t_grasp']:.3f}s"
+        )
+
+    # ── Affichage terminal ────────────────────────────────────
+    print(f"\n{sep_double}")
+    print(header)
+    print(sep_single)
+    for row in rows:
+        print(row)
+    print(sep_double)
+
+    # ── Écriture fichier (mode 'w' → écrase l'ancien) ────────
+    run_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    with open(BENCHMARK_FILE, 'w', encoding='utf-8') as f:
+        f.write(f"Benchmark — {run_time}\n")
+        f.write(f"Instances  : {directory}\n")
+        f.write(f"Solutions  : {output_dir or SOL_DIR}/\n\n")
+
+        f.write(f"{sep_double}\n")
+        f.write(f"{header}\n")
+        f.write(f"{sep_single}\n")
+        for row in rows:
+            f.write(f"{row}\n")
+        f.write(f"{sep_double}\n\n")
+
+        f.write("Temps d'exécution par instance :\n")
+        f.write(f"{sep_single}\n")
+        for row in time_rows:
+            f.write(f"{row}\n")
+        f.write(f"{sep_single}\n")
+
+    print(f"\n  ✓ Résultats sauvegardés : {BENCHMARK_FILE}")
+
 
 
 # ==============================================================================

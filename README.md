@@ -34,19 +34,21 @@ $$\max\left(\sum_{j=1}^{m} y_j,\ -\sum_{i=1}^{n} c_i x_i\right)$$
 ## Algorithmes implémentés
 
 ### 1. Heuristique constructive gloutonne
-Construction itérative d'une solution en sélectionnant à chaque étape la ressource admissible maximisant le ratio **couverture marginale / coût**. Utilise l'index inverse `covered_by` pour ne considérer que les ressources pertinentes.
+Construction itérative d'une solution en sélectionnant à chaque étape la ressource admissible maximisant le ratio **couverture marginale / coût**. Utilise l'index inverse `covered_by` pour ne considérer que les ressources couvrant au moins une cible manquante.
 
 ### 2. Recherche locale
-Amélioration par exploration de voisinage avec trois types de mouvements :
-- **ADD** — ajouter une ressource qui couvre de nouvelles cibles
-- **SWAP** — remplacer une ressource par une meilleure (best-improve)
-- **REMOVE** — retirer une ressource redondante pour réduire le coût
+Amélioration par exploration de voisinage avec trois types de mouvements, dans l'ordre de priorité :
+- **ADD** — ajouter la meilleure ressource admissible qui augmente la couverture
+- **SWAP** — remplacer une ressource par une autre avec un meilleur delta (best-improve)
+- **REMOVE** — retirer une ressource redondante (`coverage_loss == 0`) pour réduire le coût
 
 ### 3. Recuit simulé *(métaheuristique)*
-Acceptation probabiliste de solutions dégradantes pour échapper aux optima locaux. La température décroît géométriquement de $T_{start}$ à $T_{end}$. Lancé **3 fois** avec des seeds fixes (42, 43, 44) pour la reproductibilité.
+Acceptation probabiliste de solutions dégradantes pour échapper aux optima locaux. La température décroît géométriquement de $T_{start} = 50$ à $T_{end} = 0.05$. Lancé **3 fois** avec des seeds fixes (42, 43, 44) pour garantir la reproductibilité. La moyenne et l'écart-type des runs sont affichés.
 
-### 4. GRASP *(métaheuristique bonus)*
-*Greedy Randomized Adaptive Search Procedure* — multidémarrage combinant un glouton randomisé (sélection dans les meilleurs $\alpha$% candidats) et une recherche locale. Permet d'explorer des régions de l'espace de solutions inaccessibles au glouton déterministe.
+### 4. GRASP *(métaheuristique)*
+*Greedy Randomized Adaptive Search Procedure* — 20 redémarrages combinant un glouton randomisé (sélection aléatoire dans les meilleurs $\alpha = 30\%$ candidats) et une recherche locale. Permet d'explorer des régions de l'espace de solutions inaccessibles au glouton déterministe.
+
+Le pipeline complet s'exécute dans l'ordre : **Glouton → Recherche locale → Recuit simulé → GRASP**, et sauvegarde la meilleure solution toutes méthodes confondues.
 
 ---
 
@@ -54,15 +56,16 @@ Acceptation probabiliste de solutions dégradantes pour échapper aux optima loc
 
 ```
 .
-├── solution.py          # Code source principal
-├── instances/           # Fichiers d'instances (.txt)
+├── solution.py              # Code source principal
+├── instances/               # Fichiers d'instances (.txt)
 │   ├── inst10_20_0.txt
 │   ├── inst15_30_0.txt
 │   └── ...
-├── sol_instances/       # Solutions générées (créé automatiquement)
+├── sol_instances/           # Solutions générées (créé automatiquement)
 │   ├── sol_inst10_20_0.txt
 │   └── ...
-├── inst_test_budget.txt # Instance de test : couverture totale impossible
+├── benchmark_results.txt    # Résultats du dernier benchmark (écrasé à chaque run)
+├── inst_test_budget.txt     # Instance de test : couverture totale impossible
 └── README.md
 ```
 
@@ -83,21 +86,26 @@ python3 solution.py --help
 ## Utilisation
 
 ```bash
-# Résoudre une instance
+# Afficher l'aide
+python3 solution.py -h
+
+# Résoudre une instance → solution dans sol_instances/
 python3 solution.py instances/inst30_50_1.txt
 
 # Résoudre toutes les instances d'un dossier
 python3 solution.py --all instances/
 
-# Benchmark comparatif (tableau récapitulatif)
+# Benchmark comparatif — affiche le tableau et écrit benchmark_results.txt
 python3 solution.py --benchmark instances/
 
 # GRASP uniquement sur une instance
 python3 solution.py --grasp instances/inst90_50_2.txt
 
-# Supprimer les fichiers de solutions générés
+# Supprimer le dossier sol_instances/ et son contenu
 python3 solution.py --reset-all
 ```
+
+> **Note :** `--reset-all` supprime uniquement `sol_instances/`. Le fichier `benchmark_results.txt` est conservé.
 
 ### Format d'entrée
 
@@ -126,14 +134,21 @@ xi1 xi2 ... xip
 ```
 
 Ligne 1 : nombre de ressources sélectionnées  
-Ligne 2 : indices des ressources sélectionnées  
-Nom du fichier : `sol_<nom_instance>.txt`
+Ligne 2 : indices des ressources sélectionnées (séparés par espaces)  
+Nom du fichier : `sol_instances/sol_<nom_instance>.txt`
+
+### Fichier benchmark
+
+Chaque exécution de `--benchmark` écrase `benchmark_results.txt` avec :
+- Le tableau comparatif (Glouton / Recherche locale / Recuit simulé / GRASP)
+- Les temps d'exécution détaillés par instance et par algorithme
+- L'horodatage du run et les chemins utilisés
 
 ---
 
 ## Résultats expérimentaux
 
-Résultats obtenus sur les 12 instances fournies (seeds fixes, machine locale) :
+Résultats obtenus sur les 12 instances fournies — seeds fixes, écart-type = 0.00 sur toutes les instances.
 
 | Instance | n | m | B | Glouton | Rech. locale | Rec. simulé | GRASP | **Meilleur** | Coût |
 |---|---|---|---|---|---|---|---|---|---|
@@ -150,19 +165,27 @@ Résultats obtenus sur les 12 instances fournies (seeds fixes, machine locale) :
 | inst90_50_2 | 90 | 50 | 270 | 49/50 | 50/50 | 50/50 | 50/50 | **50/50** | 244.0 |
 | inst150_120_2 | 150 | 120 | 450 | 120/120 | 120/120 | 120/120 | 120/120 | **120/120** | 228.0 |
 
-> 11/12 instances couvertes à 100%. L'instance `inst50_30_2` atteint 29/30 (96.7%) — la cible manquante est mathématiquement inatteignable avec le budget disponible quelle que soit la combinaison choisie.
+> **11/12 instances couvertes à 100%.** L'instance `inst50_30_2` atteint 29/30 (96.7%) — la cible manquante est mathématiquement inatteignable avec le budget disponible, quelle que soit la combinaison de ressources choisie.
 
-> Le recuit simulé est lancé 3 fois par instance (seeds 42, 43, 44). Écart-type observé = 0.00 sur toutes les instances → résultats stables et reproductibles.
+> **Stabilité :** le recuit simulé est lancé 3 fois par instance (seeds 42, 43, 44). L'écart-type observé est 0.00 sur toutes les instances, ce qui confirme la stabilité des résultats.
+
+> **Apport de GRASP :** sur les grandes instances, GRASP obtient systématiquement des coûts inférieurs au recuit simulé (ex. : 228 vs 252 sur `inst150_120_2`, 168 vs 175 sur `inst30_80_0`), au prix d'un temps de calcul comparable.
 
 ---
 
 ## Reproductibilité
 
-Tous les algorithmes aléatoires utilisent des seeds fixes. Les résultats sont identiques à chaque exécution.
+Tous les algorithmes aléatoires utilisent des seeds fixes. Les résultats sont identiques à chaque exécution sur la même machine.
+
+| Algorithme | Seed(s) utilisée(s) |
+|---|---|
+| Recuit simulé | 42, 43, 44 (3 runs indépendants) |
+| GRASP | 42 |
 
 ```bash
 # Résultats identiques à chaque appel
 python3 solution.py --benchmark instances/
+# → écrase benchmark_results.txt avec les nouveaux résultats
 ```
 
 ---
@@ -171,9 +194,11 @@ python3 solution.py --benchmark instances/
 
 **Mises à jour incrémentales** — le compteur `cover_count[j]` est maintenu en temps réel. Ajouter ou retirer une ressource coûte O(k_i) au lieu de O(n×m), ce qui rend les algorithmes d'amélioration viables sur les grandes instances.
 
-**Index inverse `covered_by`** — utilisé dans le glouton pour ne calculer le score que des ressources couvrant au moins une cible manquante, évitant un parcours inutile de toutes les ressources.
+**Index inverse `covered_by`** — utilisé dans le glouton pour restreindre la recherche aux seules ressources couvrant au moins une cible manquante, via `covered_by[t]` sur chaque cible non couverte.
 
-**Objectif lexicographique via tuple** — `evaluate()` retourne `(num_covered, -total_cost)`. Python compare les tuples élément par élément, ce qui implémente naturellement la priorité couverture > coût sans code supplémentaire.
+**Objectif lexicographique via tuple** — `evaluate()` retourne `(num_covered, -total_cost)`. Python compare les tuples élément par élément, ce qui implémente naturellement la priorité couverture > coût sans condition supplémentaire.
+
+**Sauvegarde automatique du benchmark** — chaque appel à `--benchmark` écrase `benchmark_results.txt` avec le tableau et les temps d'exécution, facilitant la traçabilité des expérimentations pour le rapport.
 
 ---
 

@@ -621,8 +621,17 @@ def benchmark(directory, output_dir=None):
     affiche le tableau récapitulatif dans le terminal
     ET l'écrit dans benchmark_results.txt (écrasé à chaque run).
     """
-    files = sorted(glob.glob(os.path.join(directory, "*.txt")))
+    import re
+
+    files = glob.glob(os.path.join(directory, "*.txt"))
     files = [f for f in files if not os.path.basename(f).startswith("sol_")]
+
+    def numeric_sort_key(path):
+        # Extrait tous les nombres du nom de fichier et trie par valeurs numériques
+        # ex : "inst30_50_1.txt" → (30, 50, 1)  /  "inst150_120_2.txt" → (150, 120, 2)
+        return tuple(int(x) for x in re.findall(r'\d+', os.path.basename(path)))
+
+    files = sorted(files, key=numeric_sort_key)
 
     if not files:
         print(f"Aucune instance trouvée dans {directory}")

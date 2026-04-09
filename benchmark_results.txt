@@ -1,4 +1,4 @@
-Benchmark — 2026-04-02 14:54:14
+Benchmark — 2026-04-03 14:44:11
 Instances  : instances/
 Solutions  : sol_instances/
 
@@ -21,16 +21,16 @@ Solutions  : sol_instances/
 
 Temps d'exécution par instance :
 ────────────────────────────────────────────────────────────────────────────────────────────
-  inst10_20_0             Glouton=0.000s  RL=0.000s  RecSim=0.175s  GRASP=0.005s
-  inst150_120_2           Glouton=0.014s  RL=0.056s  RecSim=1.879s  GRASP=1.874s
-  inst15_30_0             Glouton=0.000s  RL=0.000s  RecSim=0.115s  GRASP=0.008s
-  inst20_30_1             Glouton=0.000s  RL=0.000s  RecSim=0.134s  GRASP=0.011s
-  inst20_40_0             Glouton=0.000s  RL=0.000s  RecSim=0.144s  GRASP=0.024s
-  inst30_50_1             Glouton=0.000s  RL=0.001s  RecSim=0.155s  GRASP=0.034s
-  inst30_80_0             Glouton=0.001s  RL=0.002s  RecSim=0.163s  GRASP=0.053s
-  inst50_30_2             Glouton=0.001s  RL=0.002s  RecSim=0.165s  GRASP=0.062s
-  inst50_80_1             Glouton=0.001s  RL=0.004s  RecSim=0.250s  GRASP=0.224s
-  inst60_90_1             Glouton=0.001s  RL=0.001s  RecSim=0.348s  GRASP=0.228s
-  inst70_40_2             Glouton=0.001s  RL=0.001s  RecSim=0.190s  GRASP=0.091s
-  inst90_50_2             Glouton=0.001s  RL=0.010s  RecSim=0.302s  GRASP=0.298s
+  inst10_20_0             Glouton=0.000s  RL=0.000s  RecSim=0.154s  GRASP=0.005s
+  inst150_120_2           Glouton=0.004s  RL=0.015s  RecSim=1.842s  GRASP=1.882s
+  inst15_30_0             Glouton=0.000s  RL=0.000s  RecSim=0.120s  GRASP=0.008s
+  inst20_30_1             Glouton=0.000s  RL=0.000s  RecSim=0.137s  GRASP=0.009s
+  inst20_40_0             Glouton=0.000s  RL=0.000s  RecSim=0.146s  GRASP=0.021s
+  inst30_50_1             Glouton=0.000s  RL=0.001s  RecSim=0.155s  GRASP=0.038s
+  inst30_80_0             Glouton=0.001s  RL=0.002s  RecSim=0.167s  GRASP=0.051s
+  inst50_30_2             Glouton=0.001s  RL=0.002s  RecSim=0.169s  GRASP=0.062s
+  inst50_80_1             Glouton=0.001s  RL=0.004s  RecSim=0.240s  GRASP=0.230s
+  inst60_90_1             Glouton=0.001s  RL=0.001s  RecSim=0.362s  GRASP=0.235s
+  inst70_40_2             Glouton=0.001s  RL=0.001s  RecSim=0.190s  GRASP=0.070s
+  inst90_50_2             Glouton=0.001s  RL=0.010s  RecSim=0.301s  GRASP=0.297s
 ────────────────────────────────────────────────────────────────────────────────────────────

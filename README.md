@@ -76,8 +76,8 @@ Le pipeline complet s'exécute dans l'ordre : **Glouton → Recherche locale →
 Aucune dépendance externe. Python 3.8+ suffit.
 
 ```bash
-git clone https://github.com/<votre-repo>/max-coverage.git
-cd max-coverage
+git clone https://github.com/OUTILS-AVANCES-POUR-LA-SECURITE
+cd OUTILS-AVANCES-POUR-LA-SECURITE
 python3 solution.py --help
 ```
 

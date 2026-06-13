@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guide d’utilisation &mdash; Couverture Maximale — Budget</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7a28dfa3"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=e6b791cb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Référence de l’API" href="api.html" />
+    <link rel="prev" title="Algorithmes" href="algorithmes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Couverture Maximale sous Contrainte de Budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contexte.html">Contexte et Formulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#contexte-applicatif">Contexte applicatif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#formulation-mathematique">Formulation mathématique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#format-des-instances">Format des instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#instances-de-test">Instances de test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmes.html">Algorithmes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#heuristique-constructive-gloutonne">Heuristique constructive gloutonne</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#recuit-simule-simulated-annealing">Recuit simulé (Simulated Annealing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#grasp">GRASP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#choix-techniques">Choix techniques</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#mises-a-jour-incrementales">Mises à jour incrémentales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#index-inverse-covered-by">Index inverse <code class="docutils literal notranslate"><span class="pre">covered_by</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#objectif-lexicographique-par-tuple">Objectif lexicographique par tuple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide d’utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commandes-disponibles">Commandes disponibles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#resoudre-une-instance">Résoudre une instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resoudre-toutes-les-instances">Résoudre toutes les instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#benchmark-comparatif">Benchmark comparatif</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grasp-seul">GRASP seul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reinitialiser-les-solutions">Réinitialiser les solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aide">Aide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#formats-de-fichiers">Formats de fichiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#format-d-entree-instance">Format d’entrée (instance)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-de-sortie-solution">Format de sortie (solution)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-du-benchmark">Format du benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reproductibilite">Reproductibilité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure-du-projet">Structure du projet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Référence de l’API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#structures-de-donnees">Structures de données</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#algorithmes">Algorithmes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#pipeline-principal">Pipeline principal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utilitaires-cli">Utilitaires CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#resume-des-complexites">Résumé des complexités</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resultats.html">Résultats expérimentaux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#conditions-d-experimentation">Conditions d’expérimentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#tableau-de-synthese">Tableau de synthèse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#analyse-par-algorithme">Analyse par algorithme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#heuristique-gloutonne">Heuristique gloutonne</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#recuit-simule">Recuit simulé</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#grasp">GRASP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Référence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auteurs.html">Auteurs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auteurs.html#equipe">Équipe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auteurs.html#contexte-academique">Contexte académique</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Couverture Maximale sous Contrainte de Budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Guide d’utilisation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utilisation.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="guide-d-utilisation">
+<span id="utilisation"></span><h1>Guide d’utilisation<a class="headerlink" href="#guide-d-utilisation" title="Lien vers cette rubrique"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Lien vers cette rubrique"></a></h2>
+<p>Aucune dépendance externe. Python 3.8+ suffit.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;url-du-dépôt&gt;
+<span class="nb">cd</span><span class="w"> </span>meta-et-heurisitique
+python3<span class="w"> </span>solution.py<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+<section id="commandes-disponibles">
+<h2>Commandes disponibles<a class="headerlink" href="#commandes-disponibles" title="Lien vers cette rubrique"></a></h2>
+<section id="resoudre-une-instance">
+<h3>Résoudre une instance<a class="headerlink" href="#resoudre-une-instance" title="Lien vers cette rubrique"></a></h3>
+<p>Résout une instance et sauvegarde la solution dans <code class="docutils literal notranslate"><span class="pre">sol_instances/</span></code> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>solution.py<span class="w"> </span>instances/inst30_50_1.txt
+</pre></div>
+</div>
+<p>Sortie typique :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>───────────────────────────────────────────────────────
+  Instance : inst30_50_1
+  n=30 ressources | m=50 cibles | B=150
+───────────────────────────────────────────────────────
+  Glouton      :   50/ 50 cibles (100.0%)  coût=   92.0  [0.001s]
+  Rech. locale :   50/ 50 cibles (100.0%)  coût=   92.0  [0.012s]
+  Recuit simulé:   50/ 50 cibles (100.0%)  coût=   92.0  [2.341s × 3 runs]
+  GRASP        :   50/ 50 cibles (100.0%)  coût=   92.0  [0.123s]
+
+  ✓ Meilleure  : 50/50 cibles (100.0%)  coût=92.0
+  ✓ Sauvegardé : sol_instances/sol_inst30_50_1.txt
+</pre></div>
+</div>
+</section>
+<section id="resoudre-toutes-les-instances">
+<h3>Résoudre toutes les instances<a class="headerlink" href="#resoudre-toutes-les-instances" title="Lien vers cette rubrique"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>solution.py<span class="w"> </span>--all<span class="w"> </span>instances/
+</pre></div>
+</div>
+</section>
+<section id="benchmark-comparatif">
+<h3>Benchmark comparatif<a class="headerlink" href="#benchmark-comparatif" title="Lien vers cette rubrique"></a></h3>
+<p>Lance toutes les instances et affiche un tableau comparatif. Écrit également
+les résultats dans <code class="docutils literal notranslate"><span class="pre">benchmark_results.txt</span></code> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>solution.py<span class="w"> </span>--benchmark<span class="w"> </span>instances/
+</pre></div>
+</div>
+</section>
+<section id="grasp-seul">
+<h3>GRASP seul<a class="headerlink" href="#grasp-seul" title="Lien vers cette rubrique"></a></h3>
+<p>Résout avec GRASP uniquement (50 itérations, recherche locale intensive) :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>solution.py<span class="w"> </span>--grasp<span class="w"> </span>instances/inst90_50_2.txt
+</pre></div>
+</div>
+</section>
+<section id="reinitialiser-les-solutions">
+<h3>Réinitialiser les solutions<a class="headerlink" href="#reinitialiser-les-solutions" title="Lien vers cette rubrique"></a></h3>
+<p>Supprime le dossier <code class="docutils literal notranslate"><span class="pre">sol_instances/</span></code> et toutes les solutions générées :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>solution.py<span class="w"> </span>--reset-all
+</pre></div>
+</div>
+</section>
+<section id="aide">
+<h3>Aide<a class="headerlink" href="#aide" title="Lien vers cette rubrique"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>solution.py<span class="w"> </span>-h
+python3<span class="w"> </span>solution.py<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+</section>
+<section id="formats-de-fichiers">
+<h2>Formats de fichiers<a class="headerlink" href="#formats-de-fichiers" title="Lien vers cette rubrique"></a></h2>
+<section id="format-d-entree-instance">
+<h3>Format d’entrée (instance)<a class="headerlink" href="#format-d-entree-instance" title="Lien vers cette rubrique"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>n m B
+c_1 c_2 ... c_n
+k_1 u_11 u_12 ...
+k_2 u_21 u_22 ...
+...
+</pre></div>
+</div>
+<p>Exemple pour 3 ressources, 4 cibles, budget 10 :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>3 4 10
+3.0 5.0 4.0
+2 0 1
+2 1 2
+3 0 2 3
+</pre></div>
+</div>
+</section>
+<section id="format-de-sortie-solution">
+<h3>Format de sortie (solution)<a class="headerlink" href="#format-de-sortie-solution" title="Lien vers cette rubrique"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>p
+xi1 xi2 ... xip
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Ligne 1 : nombre de ressources sélectionnées</p></li>
+<li><p>Ligne 2 : indices (base 0) des ressources sélectionnées, séparés par espaces</p></li>
+<li><p>Fichier : <code class="docutils literal notranslate"><span class="pre">sol_instances/sol_&lt;nom_instance&gt;.txt</span></code></p></li>
+</ul>
+<p>Exemple :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2
+0 2
+</pre></div>
+</div>
+</section>
+<section id="format-du-benchmark">
+<h3>Format du benchmark<a class="headerlink" href="#format-du-benchmark" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">benchmark_results.txt</span></code> contient :</p>
+<ul class="simple">
+<li><p>L’horodatage du run</p></li>
+<li><p>Le tableau comparatif (Glouton / RL / RecSim / GRASP / Meilleur / Coût / σ)</p></li>
+<li><p>Les temps d’exécution détaillés par instance et par algorithme</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Benchmark — 2025-11-20 14:32:01
+Instances  : instances/
+Solutions  : sol_instances/
+
+════════════════════════════════════════════════════════
+  Instance          n    m      B  Glouton   RL  RecSim ...
+────────────────────────────────────────────────────────
+  inst10_20_0      10   20     80    20/20 20/20   20/20 ...
+</pre></div>
+</div>
+</section>
+</section>
+<section id="reproductibilite">
+<h2>Reproductibilité<a class="headerlink" href="#reproductibilite" title="Lien vers cette rubrique"></a></h2>
+<p>Tous les algorithmes aléatoires utilisent des <strong>seeds fixes</strong>. Les résultats
+sont identiques à chaque exécution sur la même machine :</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38.5%" />
+<col style="width: 61.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Algorithme</p></th>
+<th class="head"><p>Seed(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Recuit simulé</p></td>
+<td><p>42, 43, 44 (3 runs indépendants)</p></td>
+</tr>
+<tr class="row-odd"><td><p>GRASP (pipeline)</p></td>
+<td><p>42</p></td>
+</tr>
+<tr class="row-even"><td><p>GRASP (standalone <code class="docutils literal notranslate"><span class="pre">--grasp</span></code>)</p></td>
+<td><p>42</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Résultats identiques à chaque appel</span>
+python3<span class="w"> </span>solution.py<span class="w"> </span>--benchmark<span class="w"> </span>instances/
+python3<span class="w"> </span>solution.py<span class="w"> </span>--benchmark<span class="w"> </span>instances/
+<span class="c1"># → même benchmark_results.txt</span>
+</pre></div>
+</div>
+</section>
+<section id="structure-du-projet">
+<h2>Structure du projet<a class="headerlink" href="#structure-du-projet" title="Lien vers cette rubrique"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>.
+├── solution.py              # Code source principal (842 lignes)
+├── instances/               # Fichiers d&#39;instances (.txt)
+│   ├── inst10_20_0.txt
+│   ├── inst15_30_0.txt
+│   └── ...                  # 12 instances au total
+├── sol_instances/           # Solutions générées (créé automatiquement)
+│   ├── sol_inst10_20_0.txt
+│   └── ...
+├── benchmark_results.txt    # Résultats du dernier benchmark
+├── inst_test_budget.txt     # Instance de test (couverture impossible)
+├── docs/                    # Documentation Sphinx
+└── README.md
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="algorithmes.html" class="btn btn-neutral float-left" title="Algorithmes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Référence de l’API" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2025-2026, William HERTRICH, Théo PLUVINAGE, Christophe GRILLET-AUBERT, Ludovic URBES.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

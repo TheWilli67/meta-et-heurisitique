@@ -4,6 +4,8 @@
 > Université Polytechnique Hauts-de-France · INSA Hauts-de-France  
 > Module : Complexité, Heuristiques & Métaheuristiques
 
+**[Documentation complète (Sphinx)](https://thewilli67.github.io/meta-et-heurisitique/docs/index.html)**
+
 ---
 
 ## Contexte
@@ -64,6 +66,14 @@ Le pipeline complet s'exécute dans l'ordre : **Glouton → Recherche locale →
 ├── sol_instances/           # Solutions générées (créé automatiquement)
 │   ├── sol_inst10_20_0.txt
 │   └── ...
+├── docs/                    # Documentation Sphinx (GitHub Pages)
+│   ├── index.html           # Page d'accueil
+│   ├── algorithmes.html
+│   ├── api.html
+│   ├── resultats.html
+│   ├── utilisation.html
+│   └── source/              # Sources RST
+├── indel.html               # Redirection vers docs/index.html
 ├── benchmark_results.txt    # Résultats du dernier benchmark (écrasé à chaque run)
 ├── inst_test_budget.txt     # Instance de test : couverture totale impossible
 └── README.md

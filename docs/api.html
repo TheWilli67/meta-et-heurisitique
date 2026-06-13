@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Référence de l’API &mdash; Couverture Maximale — Budget</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7a28dfa3"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=e6b791cb"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Résultats expérimentaux" href="resultats.html" />
+    <link rel="prev" title="Guide d’utilisation" href="utilisation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Couverture Maximale sous Contrainte de Budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contexte.html">Contexte et Formulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#contexte-applicatif">Contexte applicatif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#formulation-mathematique">Formulation mathématique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#format-des-instances">Format des instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#instances-de-test">Instances de test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmes.html">Algorithmes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#heuristique-constructive-gloutonne">Heuristique constructive gloutonne</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#recuit-simule-simulated-annealing">Recuit simulé (Simulated Annealing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#grasp">GRASP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#choix-techniques">Choix techniques</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#mises-a-jour-incrementales">Mises à jour incrémentales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#index-inverse-covered-by">Index inverse <code class="docutils literal notranslate"><span class="pre">covered_by</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#objectif-lexicographique-par-tuple">Objectif lexicographique par tuple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilisation.html">Guide d’utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#commandes-disponibles">Commandes disponibles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#resoudre-une-instance">Résoudre une instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#resoudre-toutes-les-instances">Résoudre toutes les instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#benchmark-comparatif">Benchmark comparatif</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#grasp-seul">GRASP seul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#reinitialiser-les-solutions">Réinitialiser les solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#aide">Aide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#formats-de-fichiers">Formats de fichiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#format-d-entree-instance">Format d’entrée (instance)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#format-de-sortie-solution">Format de sortie (solution)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#format-du-benchmark">Format du benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#reproductibilite">Reproductibilité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#structure-du-projet">Structure du projet</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Référence de l’API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structures-de-donnees">Structures de données</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#solution.Problem"><code class="docutils literal notranslate"><span class="pre">Problem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Problem.__init__"><code class="docutils literal notranslate"><span class="pre">Problem.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Problem.__repr__"><code class="docutils literal notranslate"><span class="pre">Problem.__repr__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#solution.Solution"><code class="docutils literal notranslate"><span class="pre">Solution</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.__init__"><code class="docutils literal notranslate"><span class="pre">Solution.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.copy"><code class="docutils literal notranslate"><span class="pre">Solution.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.is_feasible"><code class="docutils literal notranslate"><span class="pre">Solution.is_feasible()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.evaluate"><code class="docutils literal notranslate"><span class="pre">Solution.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.add_resource"><code class="docutils literal notranslate"><span class="pre">Solution.add_resource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.remove_resource"><code class="docutils literal notranslate"><span class="pre">Solution.remove_resource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.marginal_coverage"><code class="docutils literal notranslate"><span class="pre">Solution.marginal_coverage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.coverage_loss"><code class="docutils literal notranslate"><span class="pre">Solution.coverage_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.uncovered_targets"><code class="docutils literal notranslate"><span class="pre">Solution.uncovered_targets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.can_add"><code class="docutils literal notranslate"><span class="pre">Solution.can_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.save"><code class="docutils literal notranslate"><span class="pre">Solution.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#solution.Solution.__repr__"><code class="docutils literal notranslate"><span class="pre">Solution.__repr__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#algorithmes">Algorithmes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#solution.greedy_constructive"><code class="docutils literal notranslate"><span class="pre">greedy_constructive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution.local_search"><code class="docutils literal notranslate"><span class="pre">local_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution.simulated_annealing"><code class="docutils literal notranslate"><span class="pre">simulated_annealing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution.grasp"><code class="docutils literal notranslate"><span class="pre">grasp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pipeline-principal">Pipeline principal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#solution.solve"><code class="docutils literal notranslate"><span class="pre">solve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution.benchmark"><code class="docutils literal notranslate"><span class="pre">benchmark()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilitaires-cli">Utilitaires CLI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#solution.print_help"><code class="docutils literal notranslate"><span class="pre">print_help()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution.reset_solutions"><code class="docutils literal notranslate"><span class="pre">reset_solutions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resume-des-complexites">Résumé des complexités</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resultats.html">Résultats expérimentaux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#conditions-d-experimentation">Conditions d’expérimentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#tableau-de-synthese">Tableau de synthèse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#analyse-par-algorithme">Analyse par algorithme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#heuristique-gloutonne">Heuristique gloutonne</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#recuit-simule">Recuit simulé</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resultats.html#grasp">GRASP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resultats.html#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Référence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auteurs.html">Auteurs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auteurs.html#equipe">Équipe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auteurs.html#contexte-academique">Contexte académique</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Couverture Maximale sous Contrainte de Budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Référence de l’API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reference-de-l-api">
+<span id="api"></span><h1>Référence de l’API<a class="headerlink" href="#reference-de-l-api" title="Lien vers cette rubrique"></a></h1>
+<p>Ce module implémente la résolution du problème de couverture maximale sous
+contrainte de budget. Il est conçu comme un script autonome mais ses classes
+et fonctions sont utilisables par import.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Problem</span><span class="p">,</span> <span class="n">Solution</span><span class="p">,</span> <span class="n">greedy_constructive</span><span class="p">,</span> <span class="n">local_search</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">simulated_annealing</span><span class="p">,</span> <span class="n">grasp</span><span class="p">,</span> <span class="n">solve</span>
+</pre></div>
+</div>
+<section id="structures-de-donnees">
+<h2>Structures de données<a class="headerlink" href="#structures-de-donnees" title="Lien vers cette rubrique"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="solution.Problem">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">Problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Problem" title="Lien vers cette définition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Représente une instance du problème de couverture maximale.</p>
+<dl class="simple">
+<dt>Attributs :</dt><dd><p>n          : nombre de ressources
+m          : nombre de cibles
+B          : budget total
+costs      : liste des coûts (costs[i] = coût de la ressource i)
+covers     : liste de sets (covers[i] = ensemble des cibles couvertes par i)
+covered_by : liste de sets (covered_by[j] = ensemble des ressources qui couvrent j)
+instance_name : nom du fichier (sans extension), utilisé pour le fichier de sortie</p>
+</dd>
+</dl>
+<p><strong>Exemple d’utilisation :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prob</span> <span class="o">=</span> <span class="n">Problem</span><span class="p">(</span><span class="s2">&quot;instances/inst30_50_1.txt&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>          <span class="c1"># Problem(n=30, m=50, B=150.0)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">costs</span><span class="p">)</span>    <span class="c1"># [c_0, c_1, ..., c_29]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>    <span class="c1"># {t : ressource 0 couvre t}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">covered_by</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>  <span class="c1"># {i : ressource i couvre cible 5}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Problem.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Problem.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Problem.__init__" title="Lien vers cette définition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Problem.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Problem.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Problem.__repr__" title="Lien vers cette définition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="solution.Solution">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">Solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution" title="Lien vers cette définition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Représente une solution (sous-ensemble de ressources sélectionnées).</p>
+<dl>
+<dt>Attributs :</dt><dd><p>selected    : set des indices de ressources sélectionnées
+cover_count : cover_count[j] = nb de ressources sélectionnées qui couvrent j</p>
+<blockquote>
+<div><p>(mis à jour de façon incrémentale — O(k_i) par opération)</p>
+</div></blockquote>
+<p>total_cost  : somme des coûts des ressources sélectionnées
+num_covered : nb de cibles j telles que cover_count[j] &gt; 0</p>
+</dd>
+</dl>
+<p><strong>Exemple d’utilisation :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prob</span> <span class="o">=</span> <span class="n">Problem</span><span class="p">(</span><span class="s2">&quot;instances/inst10_20_0.txt&quot;</span><span class="p">)</span>
+<span class="n">sol</span>  <span class="o">=</span> <span class="n">Solution</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+<span class="n">sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">num_covered</span><span class="p">)</span>   <span class="c1"># nombre de cibles couvertes</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">total_cost</span><span class="p">)</span>    <span class="c1"># coût total</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">())</span>    <span class="c1"># (num_covered, -total_cost)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">is_feasible</span><span class="p">())</span> <span class="c1"># True si coût ≤ budget</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.__init__" title="Lien vers cette définition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.copy" title="Lien vers cette définition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.is_feasible">
+<span class="sig-name descname"><span class="pre">is_feasible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.is_feasible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.is_feasible" title="Lien vers cette définition"></a></dt>
+<dd><p>Vérifie que la contrainte budgétaire est respectée.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.evaluate" title="Lien vers cette définition"></a></dt>
+<dd><p>Retourne (num_covered, -total_cost) pour la maximisation lexicographique :
+1er critère : maximiser le nb de cibles couvertes
+2ème critère : à égalité, minimiser le coût (donc maximiser -coût)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.add_resource">
+<span class="sig-name descname"><span class="pre">add_resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.add_resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.add_resource" title="Lien vers cette définition"></a></dt>
+<dd><p>Ajoute la ressource i. Ne vérifie pas la faisabilité (à faire en amont).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.remove_resource">
+<span class="sig-name descname"><span class="pre">remove_resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.remove_resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.remove_resource" title="Lien vers cette définition"></a></dt>
+<dd><p>Retire la ressource i.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.marginal_coverage">
+<span class="sig-name descname"><span class="pre">marginal_coverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.marginal_coverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.marginal_coverage" title="Lien vers cette définition"></a></dt>
+<dd><p>Nombre de nouvelles cibles couvertes si on ajoute la ressource i.
+On parcourt covers[i] et on compte les cibles dont cover_count == 0.
+Complexité : O(k_i)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.coverage_loss">
+<span class="sig-name descname"><span class="pre">coverage_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.coverage_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.coverage_loss" title="Lien vers cette définition"></a></dt>
+<dd><p>Nombre de cibles perdues si on retire la ressource i.
+Une cible est perdue uniquement si cover_count[t] == 1
+(i est la seule ressource sélectionnée qui la couvre).
+Complexité : O(k_i)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.uncovered_targets">
+<span class="sig-name descname"><span class="pre">uncovered_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.uncovered_targets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.uncovered_targets" title="Lien vers cette définition"></a></dt>
+<dd><p>Retourne l’ensemble des indices de cibles pas encore couvertes.
+Utilisé dans le glouton via covered_by pour ne considérer
+que les ressources pertinentes (celles qui couvrent une cible manquante).
+Complexité : O(m)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.can_add">
+<span class="sig-name descname"><span class="pre">can_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.can_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.can_add" title="Lien vers cette définition"></a></dt>
+<dd><p>Vérifie qu’on peut ajouter i sans dépasser le budget.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.save" title="Lien vers cette définition"></a></dt>
+<dd><p>Sauvegarde la solution dans sol_&lt;nom_instance&gt;.txt
+Format :</p>
+<blockquote>
+<div><p>p
+xi1 xi2 … xip</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#Solution.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.Solution.__repr__" title="Lien vers cette définition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="algorithmes">
+<h2>Algorithmes<a class="headerlink" href="#algorithmes" title="Lien vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.greedy_constructive">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">greedy_constructive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#greedy_constructive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.greedy_constructive" title="Lien vers cette définition"></a></dt>
+<dd><p>Construit une solution initiale faisable par approche gloutonne.</p>
+<p>Critère de sélection : ratio couverture_marginale / coût.
+Si randomized=True (pour GRASP) : sélection dans les meilleurs alpha%.</p>
+<dl class="simple">
+<dt>Utilisation de covered_by :</dt><dd><p>À chaque étape, on identifie les cibles non couvertes, puis on remonte
+via covered_by[t] pour ne considérer QUE les ressources qui couvrent
+au moins une cible manquante. Cela évite de calculer marginal_coverage
+sur des ressources qui n’apporteraient rien.</p>
+</dd>
+</dl>
+<p>Complexité : O(n * k_max) par étape au lieu de O(n² * k_max).</p>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Glouton déterministe</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">greedy_constructive</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+
+<span class="c1"># Glouton randomisé (pour GRASP)</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">greedy_constructive</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">randomized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.local_search">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">local_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#local_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.local_search" title="Lien vers cette définition"></a></dt>
+<dd><p>Améliore une solution par recherche locale.</p>
+<dl class="simple">
+<dt>Voisinage exploré à chaque itération (dans l’ordre) :</dt><dd><ol class="arabic simple">
+<li><p>ADD   : ajouter une ressource qui augmente la couverture</p></li>
+<li><p>SWAP  : remplacer une ressource par une autre (meilleur delta)</p></li>
+<li><dl class="simple">
+<dt>REMOVE: retirer une ressource redondante (coverage_loss == 0)</dt><dd><p>pour libérer du budget → permet des swaps futurs</p>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+<p>Stratégie : first-improve pour ADD/REMOVE, best-improve pour SWAP.
+S’arrête quand aucun mouvement n’améliore la solution.</p>
+<p>Complexité par itération : O(n²) pour SWAP.</p>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sol_init</span> <span class="o">=</span> <span class="n">greedy_constructive</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+<span class="n">sol_améliorée</span> <span class="o">=</span> <span class="n">local_search</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">sol_init</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.simulated_annealing">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">simulated_annealing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#simulated_annealing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.simulated_annealing" title="Lien vers cette définition"></a></dt>
+<dd><p>Recuit simulé (Simulated Annealing).</p>
+<dl class="simple">
+<dt>Principe :</dt><dd><ul class="simple">
+<li><p>Génère aléatoirement un voisin (add / remove / swap)</p></li>
+<li><p>Accepte toujours une amélioration</p></li>
+<li><p>Accepte une dégradation avec probabilité exp(Δ / T)</p></li>
+<li><p>La température T décroît géométriquement de T_start à T_end</p></li>
+</ul>
+</dd>
+<dt>Paramètres :</dt><dd><p>max_iter : nombre d’itérations total
+T_start  : température initiale (contrôle l’exploration initiale)
+T_end    : température finale (quasi aucune acceptation dégradante)
+seed     : graine pour reproductibilité</p>
+</dd>
+</dl>
+<p>Complexité : O(max_iter * k_max)</p>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sol_init</span> <span class="o">=</span> <span class="n">local_search</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">greedy_constructive</span><span class="p">(</span><span class="n">prob</span><span class="p">))</span>
+<span class="c1"># Run avec seed fixe pour reproductibilité</span>
+<span class="n">sol_sa</span> <span class="o">=</span> <span class="n">simulated_annealing</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">sol_init</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="c1"># Run avec paramètres personnalisés</span>
+<span class="n">sol_sa</span> <span class="o">=</span> <span class="n">simulated_annealing</span><span class="p">(</span>
+    <span class="n">prob</span><span class="p">,</span> <span class="n">sol_init</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span> <span class="n">T_start</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">T_end</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.grasp">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">grasp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ls_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#grasp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.grasp" title="Lien vers cette définition"></a></dt>
+<dd><p>GRASP : Greedy Randomized Adaptive Search Procedure.</p>
+<dl class="simple">
+<dt>À chaque itération :</dt><dd><ol class="arabic simple">
+<li><p>Construit une solution initiale avec le glouton randomisé</p></li>
+<li><p>Améliore avec une recherche locale légère</p></li>
+<li><p>Garde la meilleure solution globale</p></li>
+</ol>
+</dd>
+<dt>Paramètres :</dt><dd><p>n_iter  : nombre de redémarrages
+alpha   : degré de randomisation (0 = glouton pur, 1 = aléatoire pur)
+ls_iter : nb max d’itérations de recherche locale par redémarrage</p>
+</dd>
+</dl>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># GRASP standalone (50 itérations)</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">grasp</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ls_iter</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># GRASP léger pour pipeline</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">grasp</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ls_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="pipeline-principal">
+<h2>Pipeline principal<a class="headerlink" href="#pipeline-principal" title="Lien vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.solve">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_runs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.solve" title="Lien vers cette définition"></a></dt>
+<dd><p>Pipeline complet pour une instance.</p>
+<dl class="simple">
+<dt>Étapes :</dt><dd><ol class="arabic simple">
+<li><p>Chargement de l’instance</p></li>
+<li><p>Heuristique gloutonne (déterministe)</p></li>
+<li><p>Recherche locale (déterministe)</p></li>
+<li><p>Recuit simulé — lancé n_runs fois avec des seeds différentes
+pour la reproductibilité et la mesure de stabilité</p></li>
+<li><p>GRASP — lancé en parallèle des runs SA</p></li>
+<li><p>Sauvegarde de la meilleure solution toutes méthodes confondues</p></li>
+</ol>
+</dd>
+<dt>Paramètres :</dt><dd><p>n_runs    : nombre de runs du recuit simulé (pour stats de stabilité)
+base_seed : seed de base ; le run k utilise la seed base_seed + k</p>
+</dd>
+</dl>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">best</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="s2">&quot;instances/inst30_50_1.txt&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;sol_instances&quot;</span><span class="p">)</span>
+
+<span class="c1"># Accès aux résultats détaillés</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;greedy&#39;</span><span class="p">][</span><span class="s1">&#39;covered&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;simulated_annealing&#39;</span><span class="p">][</span><span class="s1">&#39;std_covered&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;grasp&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.benchmark">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.benchmark" title="Lien vers cette définition"></a></dt>
+<dd><p>Lance solve() sur toutes les instances d’un dossier,
+affiche le tableau récapitulatif dans le terminal
+ET l’écrit dans benchmark_results.txt (écrasé à chaque run).</p>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">benchmark</span><span class="p">(</span><span class="s2">&quot;instances/&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;sol_instances&quot;</span><span class="p">)</span>
+<span class="c1"># → Affiche le tableau et écrit benchmark_results.txt</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="utilitaires-cli">
+<h2>Utilitaires CLI<a class="headerlink" href="#utilitaires-cli" title="Lien vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.print_help">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">print_help</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#print_help"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.print_help" title="Lien vers cette définition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="solution.reset_solutions">
+<span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">reset_solutions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/solution.html#reset_solutions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#solution.reset_solutions" title="Lien vers cette définition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="resume-des-complexites">
+<h2>Résumé des complexités<a class="headerlink" href="#resume-des-complexites" title="Lien vers cette rubrique"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29.4%" />
+<col style="width: 23.5%" />
+<col style="width: 47.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Opération</p></th>
+<th class="head"><p>Complexité</p></th>
+<th class="head"><p>Commentaire</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">add_resource(i)</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(k_i)\)</span></p></td>
+<td><p>Mise à jour incrémentale de <code class="docutils literal notranslate"><span class="pre">cover_count</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">remove_resource(i)</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(k_i)\)</span></p></td>
+<td><p>Mise à jour incrémentale de <code class="docutils literal notranslate"><span class="pre">cover_count</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">marginal_coverage(i)</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(k_i)\)</span></p></td>
+<td><p>Parcours de <code class="docutils literal notranslate"><span class="pre">covers[i]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">coverage_loss(i)</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(k_i)\)</span></p></td>
+<td><p>Parcours de <code class="docutils literal notranslate"><span class="pre">covers[i]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">greedy_constructive</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(n \cdot k_{max})\)</span></p></td>
+<td><p>Par étape, avec index <code class="docutils literal notranslate"><span class="pre">covered_by</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">local_search</span></code> (par iter)</p></td>
+<td><p><span class="math notranslate nohighlight">\(O(n^2)\)</span></p></td>
+<td><p>Phase SWAP, best-improve</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">simulated_annealing</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(\text{max\_iter} \cdot k_{max})\)</span></p></td>
+<td><p>Mouvements aléatoires unitaires</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grasp</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(O(n\_iter \cdot (n \cdot k_{max} + n^2 \cdot ls\_iter))\)</span></p></td>
+<td><p>Glouton + RL par restart</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="utilisation.html" class="btn btn-neutral float-left" title="Guide d’utilisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="resultats.html" class="btn btn-neutral float-right" title="Résultats expérimentaux" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2025-2026, William HERTRICH, Théo PLUVINAGE, Christophe GRILLET-AUBERT, Ludovic URBES.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

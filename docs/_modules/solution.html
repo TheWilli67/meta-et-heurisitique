@@ -1,0 +1,1121 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>solution &mdash; Couverture Maximale — Budget</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7a28dfa3"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/translations.js?v=e6b791cb"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Couverture Maximale sous Contrainte de Budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contexte.html">Contexte et Formulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contexte.html#contexte-applicatif">Contexte applicatif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contexte.html#formulation-mathematique">Formulation mathématique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contexte.html#format-des-instances">Format des instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contexte.html#instances-de-test">Instances de test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithmes.html">Algorithmes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithmes.html#heuristique-constructive-gloutonne">Heuristique constructive gloutonne</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithmes.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithmes.html#recuit-simule-simulated-annealing">Recuit simulé (Simulated Annealing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithmes.html#grasp">GRASP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithmes.html#choix-techniques">Choix techniques</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../algorithmes.html#mises-a-jour-incrementales">Mises à jour incrémentales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithmes.html#index-inverse-covered-by">Index inverse <code class="docutils literal notranslate"><span class="pre">covered_by</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithmes.html#objectif-lexicographique-par-tuple">Objectif lexicographique par tuple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utilisation.html">Guide d’utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../utilisation.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utilisation.html#commandes-disponibles">Commandes disponibles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#resoudre-une-instance">Résoudre une instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#resoudre-toutes-les-instances">Résoudre toutes les instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#benchmark-comparatif">Benchmark comparatif</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#grasp-seul">GRASP seul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#reinitialiser-les-solutions">Réinitialiser les solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#aide">Aide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utilisation.html#formats-de-fichiers">Formats de fichiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#format-d-entree-instance">Format d’entrée (instance)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#format-de-sortie-solution">Format de sortie (solution)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utilisation.html#format-du-benchmark">Format du benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utilisation.html#reproductibilite">Reproductibilité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utilisation.html#structure-du-projet">Structure du projet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Référence de l’API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#structures-de-donnees">Structures de données</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.Problem"><code class="docutils literal notranslate"><span class="pre">Problem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Problem.__init__"><code class="docutils literal notranslate"><span class="pre">Problem.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Problem.__repr__"><code class="docutils literal notranslate"><span class="pre">Problem.__repr__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.Solution"><code class="docutils literal notranslate"><span class="pre">Solution</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.__init__"><code class="docutils literal notranslate"><span class="pre">Solution.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.copy"><code class="docutils literal notranslate"><span class="pre">Solution.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.is_feasible"><code class="docutils literal notranslate"><span class="pre">Solution.is_feasible()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.evaluate"><code class="docutils literal notranslate"><span class="pre">Solution.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.add_resource"><code class="docutils literal notranslate"><span class="pre">Solution.add_resource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.remove_resource"><code class="docutils literal notranslate"><span class="pre">Solution.remove_resource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.marginal_coverage"><code class="docutils literal notranslate"><span class="pre">Solution.marginal_coverage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.coverage_loss"><code class="docutils literal notranslate"><span class="pre">Solution.coverage_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.uncovered_targets"><code class="docutils literal notranslate"><span class="pre">Solution.uncovered_targets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.can_add"><code class="docutils literal notranslate"><span class="pre">Solution.can_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.save"><code class="docutils literal notranslate"><span class="pre">Solution.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api.html#solution.Solution.__repr__"><code class="docutils literal notranslate"><span class="pre">Solution.__repr__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#algorithmes">Algorithmes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.greedy_constructive"><code class="docutils literal notranslate"><span class="pre">greedy_constructive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.local_search"><code class="docutils literal notranslate"><span class="pre">local_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.simulated_annealing"><code class="docutils literal notranslate"><span class="pre">simulated_annealing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.grasp"><code class="docutils literal notranslate"><span class="pre">grasp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#pipeline-principal">Pipeline principal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.solve"><code class="docutils literal notranslate"><span class="pre">solve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.benchmark"><code class="docutils literal notranslate"><span class="pre">benchmark()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#utilitaires-cli">Utilitaires CLI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.print_help"><code class="docutils literal notranslate"><span class="pre">print_help()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#solution.reset_solutions"><code class="docutils literal notranslate"><span class="pre">reset_solutions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#resume-des-complexites">Résumé des complexités</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../resultats.html">Résultats expérimentaux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../resultats.html#conditions-d-experimentation">Conditions d’expérimentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resultats.html#tableau-de-synthese">Tableau de synthèse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resultats.html#analyse-par-algorithme">Analyse par algorithme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../resultats.html#heuristique-gloutonne">Heuristique gloutonne</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../resultats.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../resultats.html#recuit-simule">Recuit simulé</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../resultats.html#grasp">GRASP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../resultats.html#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Référence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auteurs.html">Auteurs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../auteurs.html#equipe">Équipe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auteurs.html#contexte-academique">Contexte académique</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Couverture Maximale sous Contrainte de Budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Code du module</a></li>
+      <li class="breadcrumb-item active">solution</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Code source de solution</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Problème de couverture maximale sous contrainte de budget</span>
+<span class="sd">Master CDSI - Semestre 10</span>
+
+<span class="sd">Auteurs : William HERTRICH - Théo PLUVINAGE - Christophe GRILLET-AUBERT - Ludovic URBES</span>
+
+<span class="sd">Usage :</span>
+<span class="sd">    python solution.py &lt;fichier_instance&gt;</span>
+<span class="sd">    python solution.py --all &lt;dossier&gt;</span>
+<span class="sd">    python solution.py --benchmark &lt;dossier&gt;</span>
+<span class="sd">    python solution.py --grasp &lt;fichier_instance&gt;</span>
+<span class="sd">    python solution.py --reset-all</span>
+<span class="sd">    python solution.py -h|--help</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># STRUCTURES DE DONNÉES</span>
+<span class="c1"># ==============================================================================</span>
+
+<div class="viewcode-block" id="Problem">
+<a class="viewcode-back" href="../api.html#solution.Problem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Problem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Représente une instance du problème de couverture maximale.</span>
+
+<span class="sd">    Attributs :</span>
+<span class="sd">        n          : nombre de ressources</span>
+<span class="sd">        m          : nombre de cibles</span>
+<span class="sd">        B          : budget total</span>
+<span class="sd">        costs      : liste des coûts (costs[i] = coût de la ressource i)</span>
+<span class="sd">        covers     : liste de sets (covers[i] = ensemble des cibles couvertes par i)</span>
+<span class="sd">        covered_by : liste de sets (covered_by[j] = ensemble des ressources qui couvrent j)</span>
+<span class="sd">        instance_name : nom du fichier (sans extension), utilisé pour le fichier de sortie</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Problem.__init__">
+<a class="viewcode-back" href="../api.html#solution.Problem.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># split() gère \r\n et les espaces multiples</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>   <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>   <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Coûts des ressources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx</span><span class="p">]));</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Couverture : covers[i] = set des indices de cibles couvertes par i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Index inverse : covered_by[j] = set des ressources qui couvrent j</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covered_by</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">covers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covered_by</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Problem.__repr__">
+<a class="viewcode-back" href="../api.html#solution.Problem.__repr__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Problem(n=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="si">}</span><span class="s2">, m=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2">, B=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Solution">
+<a class="viewcode-back" href="../api.html#solution.Solution">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Solution</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Représente une solution (sous-ensemble de ressources sélectionnées).</span>
+
+<span class="sd">    Attributs :</span>
+<span class="sd">        selected    : set des indices de ressources sélectionnées</span>
+<span class="sd">        cover_count : cover_count[j] = nb de ressources sélectionnées qui couvrent j</span>
+<span class="sd">                      (mis à jour de façon incrémentale — O(k_i) par opération)</span>
+<span class="sd">        total_cost  : somme des coûts des ressources sélectionnées</span>
+<span class="sd">        num_covered : nb de cibles j telles que cover_count[j] &gt; 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Solution.__init__">
+<a class="viewcode-back" href="../api.html#solution.Solution.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected</span>    <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">problem</span><span class="o">.</span><span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span>  <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="Solution.copy">
+<a class="viewcode-back" href="../api.html#solution.Solution.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">selected</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">cover_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">total_cost</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_covered</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+    <span class="c1"># --- Prédicats ---</span>
+
+<div class="viewcode-block" id="Solution.is_feasible">
+<a class="viewcode-back" href="../api.html#solution.Solution.is_feasible">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_feasible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Vérifie que la contrainte budgétaire est respectée.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">B</span> <span class="o">+</span> <span class="mf">1e-9</span></div>
+
+
+<div class="viewcode-block" id="Solution.evaluate">
+<a class="viewcode-back" href="../api.html#solution.Solution.evaluate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne (num_covered, -total_cost) pour la maximisation lexicographique :</span>
+<span class="sd">        1er critère : maximiser le nb de cibles couvertes</span>
+<span class="sd">        2ème critère : à égalité, minimiser le coût (donc maximiser -coût)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_covered</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span><span class="p">)</span></div>
+
+
+    <span class="c1"># --- Opérations élémentaires (mises à jour incrémentales) ---</span>
+
+<div class="viewcode-block" id="Solution.add_resource">
+<a class="viewcode-back" href="../api.html#solution.Solution.add_resource">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ajoute la ressource i. Ne vérifie pas la faisabilité (à faire en amont).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="Solution.remove_resource">
+<a class="viewcode-back" href="../api.html#solution.Solution.remove_resource">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retire la ressource i.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">-=</span> <span class="mi">1</span></div>
+
+
+    <span class="c1"># --- Calculs utilitaires ---</span>
+
+<div class="viewcode-block" id="Solution.marginal_coverage">
+<a class="viewcode-back" href="../api.html#solution.Solution.marginal_coverage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">marginal_coverage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Nombre de nouvelles cibles couvertes si on ajoute la ressource i.</span>
+<span class="sd">        On parcourt covers[i] et on compte les cibles dont cover_count == 0.</span>
+<span class="sd">        Complexité : O(k_i)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Solution.coverage_loss">
+<a class="viewcode-back" href="../api.html#solution.Solution.coverage_loss">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coverage_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Nombre de cibles perdues si on retire la ressource i.</span>
+<span class="sd">        Une cible est perdue uniquement si cover_count[t] == 1</span>
+<span class="sd">        (i est la seule ressource sélectionnée qui la couvre).</span>
+<span class="sd">        Complexité : O(k_i)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Solution.uncovered_targets">
+<a class="viewcode-back" href="../api.html#solution.Solution.uncovered_targets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uncovered_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retourne l&#39;ensemble des indices de cibles pas encore couvertes.</span>
+<span class="sd">        Utilisé dans le glouton via covered_by pour ne considérer</span>
+<span class="sd">        que les ressources pertinentes (celles qui couvrent une cible manquante).</span>
+<span class="sd">        Complexité : O(m)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Solution.can_add">
+<a class="viewcode-back" href="../api.html#solution.Solution.can_add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">can_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Vérifie qu&#39;on peut ajouter i sans dépasser le budget.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">B</span> <span class="o">+</span> <span class="mf">1e-9</span><span class="p">)</span></div>
+
+
+    <span class="c1"># --- Sauvegarde ---</span>
+
+<div class="viewcode-block" id="Solution.save">
+<a class="viewcode-back" href="../api.html#solution.Solution.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sauvegarde la solution dans sol_&lt;nom_instance&gt;.txt</span>
+<span class="sd">        Format :</span>
+<span class="sd">            p</span>
+<span class="sd">            xi1 xi2 ... xip</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sol_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">instance_name</span><span class="si">}</span><span class="s2">.txt&quot;</span>
+        <span class="k">if</span> <span class="n">output_dir</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="n">sorted_sel</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sorted_sel</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">sorted_sel</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="Solution.__repr__">
+<a class="viewcode-back" href="../api.html#solution.Solution.__repr__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Solution(covered=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_covered</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;cost=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">B</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;feasible=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">is_feasible</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># HEURISTIQUE CONSTRUCTIVE GLOUTONNE</span>
+<span class="c1"># ==============================================================================</span>
+
+<div class="viewcode-block" id="greedy_constructive">
+<a class="viewcode-back" href="../api.html#solution.greedy_constructive">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">greedy_constructive</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">randomized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construit une solution initiale faisable par approche gloutonne.</span>
+
+<span class="sd">    Critère de sélection : ratio couverture_marginale / coût.</span>
+<span class="sd">    Si randomized=True (pour GRASP) : sélection dans les meilleurs alpha%.</span>
+
+<span class="sd">    Utilisation de covered_by :</span>
+<span class="sd">      À chaque étape, on identifie les cibles non couvertes, puis on remonte</span>
+<span class="sd">      via covered_by[t] pour ne considérer QUE les ressources qui couvrent</span>
+<span class="sd">      au moins une cible manquante. Cela évite de calculer marginal_coverage</span>
+<span class="sd">      sur des ressources qui n&#39;apporteraient rien.</span>
+
+<span class="sd">    Complexité : O(n * k_max) par étape au lieu de O(n² * k_max).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sol</span>        <span class="o">=</span> <span class="n">Solution</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># --- Étape 1 : trouver les cibles non encore couvertes ---</span>
+        <span class="n">uncovered</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">uncovered_targets</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">uncovered</span><span class="p">:</span>
+            <span class="k">break</span>  <span class="c1"># toutes les cibles sont couvertes</span>
+
+        <span class="c1"># --- Étape 2 : via covered_by, trouver les ressources pertinentes ---</span>
+        <span class="c1"># On ne calcule le score QUE pour les ressources qui couvrent</span>
+        <span class="c1"># au moins une cible manquante (les autres ont marginal_coverage == 0)</span>
+        <span class="n">relevant</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">uncovered</span><span class="p">:</span>
+            <span class="n">relevant</span> <span class="o">|=</span> <span class="n">problem</span><span class="o">.</span><span class="n">covered_by</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>  <span class="c1"># union des ressources utiles</span>
+        <span class="n">relevant</span> <span class="o">&amp;=</span> <span class="n">candidates</span>                  <span class="c1"># parmi celles pas encore ajoutées</span>
+
+        <span class="c1"># --- Étape 3 : filtrer par budget et calculer les scores ---</span>
+        <span class="n">improving</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">relevant</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">sol</span><span class="o">.</span><span class="n">can_add</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">marginal_coverage</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>  <span class="c1"># nb de nouvelles cibles couvertes</span>
+            <span class="k">if</span> <span class="n">mc</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">improving</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">mc</span><span class="p">,</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">improving</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="c1"># --- Étape 4 : trier par ratio couverture marginale / coût ---</span>
+        <span class="n">improving</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">randomized</span><span class="p">:</span>
+            <span class="c1"># GRASP : choisir aléatoirement parmi les meilleurs alpha%</span>
+            <span class="n">limit</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">improving</span><span class="p">)</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">))</span>
+            <span class="n">chosen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">improving</span><span class="p">[:</span><span class="n">limit</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">chosen</span> <span class="o">=</span> <span class="n">improving</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="n">chosen</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">candidates</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">chosen</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">sol</span></div>
+
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># RECHERCHE LOCALE</span>
+<span class="c1"># ==============================================================================</span>
+
+<div class="viewcode-block" id="local_search">
+<a class="viewcode-back" href="../api.html#solution.local_search">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">local_search</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">initial_sol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Améliore une solution par recherche locale.</span>
+
+<span class="sd">    Voisinage exploré à chaque itération (dans l&#39;ordre) :</span>
+<span class="sd">      1. ADD   : ajouter une ressource qui augmente la couverture</span>
+<span class="sd">      2. SWAP  : remplacer une ressource par une autre (meilleur delta)</span>
+<span class="sd">      3. REMOVE: retirer une ressource redondante (coverage_loss == 0)</span>
+<span class="sd">                 pour libérer du budget → permet des swaps futurs</span>
+
+<span class="sd">    Stratégie : first-improve pour ADD/REMOVE, best-improve pour SWAP.</span>
+<span class="sd">    S&#39;arrête quand aucun mouvement n&#39;améliore la solution.</span>
+
+<span class="sd">    Complexité par itération : O(n²) pour SWAP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">best_sol</span> <span class="o">=</span> <span class="n">initial_sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="n">improved</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># --- 1. ADD : ajouter la meilleure ressource admissible ---</span>
+        <span class="n">best_add</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">best_add_score</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># (couverture marginale, -coût)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">sol</span><span class="o">.</span><span class="n">can_add</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">marginal_coverage</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="o">-</span><span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_add_score</span><span class="p">:</span>
+                <span class="n">best_add_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_add</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">if</span> <span class="n">best_add</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="n">best_add</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">best_sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">():</span>
+                <span class="n">best_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">improved</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># --- 2. SWAP : remplacer une ressource par une autre ---</span>
+        <span class="n">best_swap</span>      <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">best_swap_gain</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>   <span class="c1"># (delta_couverture, delta_coût_négatif)</span>
+
+        <span class="n">selected_list</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">)</span>
+        <span class="n">not_selected</span>   <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">selected_list</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">coverage_loss</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">not_selected</span><span class="p">:</span>
+                <span class="n">new_cost</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">total_cost</span> <span class="o">-</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">+</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">new_cost</span> <span class="o">&gt;</span> <span class="n">problem</span><span class="o">.</span><span class="n">B</span> <span class="o">+</span> <span class="mf">1e-9</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="c1"># Gain net en couverture</span>
+                <span class="n">gain</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+                           <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="c1"># Perte nette : cibles de r uniquement couvertes par r</span>
+                <span class="c1"># et pas dans covers[a]</span>
+                <span class="n">net_loss</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+                               <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">cover_count</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+                               <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">problem</span><span class="o">.</span><span class="n">covers</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
+                <span class="n">delta_cov</span>  <span class="o">=</span> <span class="n">gain</span> <span class="o">-</span> <span class="n">net_loss</span>
+                <span class="n">delta_cost</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">-</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>  <span class="c1"># &gt;0 si on économise</span>
+
+                <span class="n">swap_score</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta_cov</span><span class="p">,</span> <span class="n">delta_cost</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">swap_score</span> <span class="o">&gt;</span> <span class="n">best_swap_gain</span><span class="p">:</span>
+                    <span class="n">best_swap_gain</span> <span class="o">=</span> <span class="n">swap_score</span>
+                    <span class="n">best_swap</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">best_swap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">best_swap_gain</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">best_swap</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">remove_resource</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">best_sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">():</span>
+                <span class="n">best_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">improved</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># --- 3. REMOVE : retirer une ressource redondante ---</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">coverage_loss</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sol</span><span class="o">.</span><span class="n">remove_resource</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                <span class="c1"># Améliore le critère secondaire (moins cher)</span>
+                <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">best_sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">():</span>
+                    <span class="n">best_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">improved</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">improved</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">best_sol</span></div>
+
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># MÉTAHEURISTIQUE : RECUIT SIMULÉ</span>
+<span class="c1"># ==============================================================================</span>
+
+<div class="viewcode-block" id="simulated_annealing">
+<a class="viewcode-back" href="../api.html#solution.simulated_annealing">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulated_annealing</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">initial_sol</span><span class="p">,</span>
+                        <span class="n">max_iter</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span>
+                        <span class="n">T_start</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+                        <span class="n">T_end</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                        <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recuit simulé (Simulated Annealing).</span>
+
+<span class="sd">    Principe :</span>
+<span class="sd">      - Génère aléatoirement un voisin (add / remove / swap)</span>
+<span class="sd">      - Accepte toujours une amélioration</span>
+<span class="sd">      - Accepte une dégradation avec probabilité exp(Δ / T)</span>
+<span class="sd">      - La température T décroît géométriquement de T_start à T_end</span>
+
+<span class="sd">    Paramètres :</span>
+<span class="sd">        max_iter : nombre d&#39;itérations total</span>
+<span class="sd">        T_start  : température initiale (contrôle l&#39;exploration initiale)</span>
+<span class="sd">        T_end    : température finale (quasi aucune acceptation dégradante)</span>
+<span class="sd">        seed     : graine pour reproductibilité</span>
+
+<span class="sd">    Complexité : O(max_iter * k_max)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">sol</span>      <span class="o">=</span> <span class="n">initial_sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">best_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">all_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="c1"># Décroissance géométrique de la température</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">T_start</span> <span class="o">*</span> <span class="p">(</span><span class="n">T_end</span> <span class="o">/</span> <span class="n">T_start</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">it</span> <span class="o">/</span> <span class="n">max_iter</span><span class="p">)</span>
+
+        <span class="c1"># --- Choisir un mouvement aléatoire ---</span>
+        <span class="n">move</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">new_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">valid</span>   <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">move</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># ADD</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_idx</span> <span class="k">if</span> <span class="n">new_sol</span><span class="o">.</span><span class="n">can_add</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+                <span class="n">new_sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">elif</span> <span class="n">move</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># REMOVE</span>
+            <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">))</span>
+                <span class="n">new_sol</span><span class="o">.</span><span class="n">remove_resource</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># SWAP</span>
+            <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">:</span>
+                <span class="n">not_sel</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_idx</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">not_sel</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">selected</span><span class="p">))</span>
+                    <span class="n">a</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">not_sel</span><span class="p">)</span>
+                    <span class="n">new_cost</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">total_cost</span> <span class="o">-</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">+</span> <span class="n">problem</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">new_cost</span> <span class="o">&lt;=</span> <span class="n">problem</span><span class="o">.</span><span class="n">B</span> <span class="o">+</span> <span class="mf">1e-9</span><span class="p">:</span>
+                        <span class="n">new_sol</span><span class="o">.</span><span class="n">remove_resource</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                        <span class="n">new_sol</span><span class="o">.</span><span class="n">add_resource</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+                        <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># --- Critère d&#39;acceptation ---</span>
+        <span class="n">cur_cov</span><span class="p">,</span>  <span class="n">cur_neg_cost</span>  <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+        <span class="n">new_cov</span><span class="p">,</span>  <span class="n">new_neg_cost</span>  <span class="o">=</span> <span class="n">new_sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+
+        <span class="c1"># Delta normalisé sur [−1, +1] (couverture prioritaire)</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_cov</span> <span class="o">-</span> <span class="n">cur_cov</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">new_neg_cost</span> <span class="o">-</span> <span class="n">cur_neg_cost</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e-4</span>
+
+        <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta</span> <span class="o">/</span> <span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)):</span>
+            <span class="n">sol</span> <span class="o">=</span> <span class="n">new_sol</span>
+
+        <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">best_sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">():</span>
+            <span class="n">best_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">best_sol</span></div>
+
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># GRASP (bonus : multidémarrage avec glouton randomisé)</span>
+<span class="c1"># ==============================================================================</span>
+
+<div class="viewcode-block" id="grasp">
+<a class="viewcode-back" href="../api.html#solution.grasp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">grasp</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ls_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GRASP : Greedy Randomized Adaptive Search Procedure.</span>
+
+<span class="sd">    À chaque itération :</span>
+<span class="sd">      1. Construit une solution initiale avec le glouton randomisé</span>
+<span class="sd">      2. Améliore avec une recherche locale légère</span>
+<span class="sd">      3. Garde la meilleure solution globale</span>
+
+<span class="sd">    Paramètres :</span>
+<span class="sd">        n_iter  : nombre de redémarrages</span>
+<span class="sd">        alpha   : degré de randomisation (0 = glouton pur, 1 = aléatoire pur)</span>
+<span class="sd">        ls_iter : nb max d&#39;itérations de recherche locale par redémarrage</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">best_sol</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iter</span><span class="p">):</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">greedy_constructive</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">randomized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">local_search</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">sol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">ls_iter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">best_sol</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">best_sol</span><span class="o">.</span><span class="n">evaluate</span><span class="p">():</span>
+            <span class="n">best_sol</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">best_sol</span></div>
+
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># PIPELINE DE RÉSOLUTION</span>
+<span class="c1"># ==============================================================================</span>
+
+<div class="viewcode-block" id="solve">
+<a class="viewcode-back" href="../api.html#solution.solve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_runs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">base_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pipeline complet pour une instance.</span>
+
+<span class="sd">    Étapes :</span>
+<span class="sd">      1. Chargement de l&#39;instance</span>
+<span class="sd">      2. Heuristique gloutonne (déterministe)</span>
+<span class="sd">      3. Recherche locale (déterministe)</span>
+<span class="sd">      4. Recuit simulé — lancé n_runs fois avec des seeds différentes</span>
+<span class="sd">         pour la reproductibilité et la mesure de stabilité</span>
+<span class="sd">      5. GRASP — lancé en parallèle des runs SA</span>
+<span class="sd">      6. Sauvegarde de la meilleure solution toutes méthodes confondues</span>
+
+<span class="sd">    Paramètres :</span>
+<span class="sd">        n_runs    : nombre de runs du recuit simulé (pour stats de stabilité)</span>
+<span class="sd">        base_seed : seed de base ; le run k utilise la seed base_seed + k</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t_total</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">Problem</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;─&#39;</span><span class="o">*</span><span class="mi">55</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Instance : </span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">instance_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  n=</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">n</span><span class="si">}</span><span class="s2"> ressources | m=</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles | B=</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">B</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;─&#39;</span><span class="o">*</span><span class="mi">55</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">max_it</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="c1"># ── 1. Glouton ────────────────────────────────────────────</span>
+    <span class="n">t0</span>         <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">sol_greedy</span> <span class="o">=</span> <span class="n">greedy_constructive</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;greedy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;sol&#39;</span><span class="p">:</span> <span class="n">sol_greedy</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">,</span>
+        <span class="s1">&#39;covered&#39;</span><span class="p">:</span> <span class="n">sol_greedy</span><span class="o">.</span><span class="n">num_covered</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">sol_greedy</span><span class="o">.</span><span class="n">total_cost</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">sol_greedy</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">/</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Glouton      : </span><span class="si">{</span><span class="n">sol_greedy</span><span class="o">.</span><span class="n">num_covered</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">%)  coût=</span><span class="si">{</span><span class="n">sol_greedy</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">7.1f</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;greedy&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s]&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ── 2. Recherche locale ───────────────────────────────────</span>
+    <span class="n">t0</span>     <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">sol_ls</span> <span class="o">=</span> <span class="n">local_search</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">sol_greedy</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;local_search&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;sol&#39;</span><span class="p">:</span> <span class="n">sol_ls</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">,</span>
+        <span class="s1">&#39;covered&#39;</span><span class="p">:</span> <span class="n">sol_ls</span><span class="o">.</span><span class="n">num_covered</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">sol_ls</span><span class="o">.</span><span class="n">total_cost</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">sol_ls</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">/</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Rech. locale : </span><span class="si">{</span><span class="n">sol_ls</span><span class="o">.</span><span class="n">num_covered</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">%)  coût=</span><span class="si">{</span><span class="n">sol_ls</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">7.1f</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;local_search&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s]&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ── 3. Recuit simulé (n_runs fois, seeds fixes) ───────────</span>
+    <span class="n">sa_covered_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sa_cost_list</span>    <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">best_sa</span>         <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">t0</span>              <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span><span class="p">):</span>
+        <span class="n">seed_k</span> <span class="o">=</span> <span class="n">base_seed</span> <span class="o">+</span> <span class="n">k</span>
+        <span class="n">sol_k</span>  <span class="o">=</span> <span class="n">simulated_annealing</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">sol_ls</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_it</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed_k</span><span class="p">)</span>
+        <span class="n">sa_covered_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sol_k</span><span class="o">.</span><span class="n">num_covered</span><span class="p">)</span>
+        <span class="n">sa_cost_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sol_k</span><span class="o">.</span><span class="n">total_cost</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">best_sa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sol_k</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">best_sa</span><span class="o">.</span><span class="n">evaluate</span><span class="p">():</span>
+            <span class="n">best_sa</span> <span class="o">=</span> <span class="n">sol_k</span>
+
+    <span class="n">t_sa</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+    <span class="n">sa_mean_cov</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sa_covered_list</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_runs</span>
+    <span class="n">sa_std_cov</span>   <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">sa_mean_cov</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sa_covered_list</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_runs</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">sa_mean_cost</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sa_cost_list</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_runs</span>
+
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;simulated_annealing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;sol&#39;</span><span class="p">:</span> <span class="n">best_sa</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">t_sa</span><span class="p">,</span>
+        <span class="s1">&#39;covered&#39;</span><span class="p">:</span> <span class="n">best_sa</span><span class="o">.</span><span class="n">num_covered</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">best_sa</span><span class="o">.</span><span class="n">total_cost</span><span class="p">,</span>
+        <span class="s1">&#39;mean_covered&#39;</span><span class="p">:</span> <span class="n">sa_mean_cov</span><span class="p">,</span> <span class="s1">&#39;std_covered&#39;</span><span class="p">:</span> <span class="n">sa_std_cov</span><span class="p">,</span>
+        <span class="s1">&#39;mean_cost&#39;</span><span class="p">:</span> <span class="n">sa_mean_cost</span><span class="p">,</span> <span class="s1">&#39;n_runs&#39;</span><span class="p">:</span> <span class="n">n_runs</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">best_sa</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">/</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Recuit simulé: </span><span class="si">{</span><span class="n">best_sa</span><span class="o">.</span><span class="n">num_covered</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">%)  coût=</span><span class="si">{</span><span class="n">best_sa</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">7.1f</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">t_sa</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s × </span><span class="si">{</span><span class="n">n_runs</span><span class="si">}</span><span class="s2"> runs]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;               moy=</span><span class="si">{</span><span class="n">sa_mean_cov</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> cibles  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;écart-type=</span><span class="si">{</span><span class="n">sa_std_cov</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">  coût moy=</span><span class="si">{</span><span class="n">sa_mean_cost</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ── 4. GRASP ──────────────────────────────────────────────</span>
+    <span class="n">t0</span>       <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">sol_gsp</span>  <span class="o">=</span> <span class="n">grasp</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ls_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">base_seed</span><span class="p">)</span>
+    <span class="n">t_grasp</span>  <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;grasp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;sol&#39;</span><span class="p">:</span> <span class="n">sol_gsp</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">t_grasp</span><span class="p">,</span>
+        <span class="s1">&#39;covered&#39;</span><span class="p">:</span> <span class="n">sol_gsp</span><span class="o">.</span><span class="n">num_covered</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">sol_gsp</span><span class="o">.</span><span class="n">total_cost</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">sol_gsp</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">/</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  GRASP        : </span><span class="si">{</span><span class="n">sol_gsp</span><span class="o">.</span><span class="n">num_covered</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">%)  coût=</span><span class="si">{</span><span class="n">sol_gsp</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">7.1f</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">t_grasp</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s]&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ── 5. Meilleure solution toutes méthodes ─────────────────</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">sol_greedy</span><span class="p">,</span> <span class="n">sol_ls</span><span class="p">,</span> <span class="n">best_sa</span><span class="p">,</span> <span class="n">sol_gsp</span><span class="p">],</span>
+        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="n">out_path</span> <span class="o">=</span> <span class="n">best</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="n">elapsed</span>  <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_total</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pct</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">best</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">/</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  ✓ Meilleure  : </span><span class="si">{</span><span class="n">best</span><span class="o">.</span><span class="n">num_covered</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)  coût=</span><span class="si">{</span><span class="n">best</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✓ Sauvegardé : </span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">  [total </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s]&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">best</span><span class="p">,</span> <span class="n">results</span></div>
+
+
+
+<span class="n">BENCHMARK_FILE</span> <span class="o">=</span> <span class="s2">&quot;benchmark_results.txt&quot;</span>
+
+
+<div class="viewcode-block" id="benchmark">
+<a class="viewcode-back" href="../api.html#solution.benchmark">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">benchmark</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lance solve() sur toutes les instances d&#39;un dossier,</span>
+<span class="sd">    affiche le tableau récapitulatif dans le terminal</span>
+<span class="sd">    ET l&#39;écrit dans benchmark_results.txt (écrasé à chaque run).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;*.txt&quot;</span><span class="p">))</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;sol_&quot;</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">numeric_sort_key</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="c1"># Extrait tous les nombres du nom de fichier et trie par valeurs numériques</span>
+        <span class="c1"># ex : &quot;inst30_50_1.txt&quot; → (30, 50, 1)  /  &quot;inst150_120_2.txt&quot; → (150, 120, 2)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">numeric_sort_key</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Aucune instance trouvée dans </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">best</span><span class="p">,</span> <span class="n">res</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">prob</span> <span class="o">=</span> <span class="n">best</span><span class="o">.</span><span class="n">problem</span>
+        <span class="n">summary</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;instance&#39;</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">instance_name</span><span class="p">,</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">B</span><span class="p">,</span>
+            <span class="s1">&#39;greedy&#39;</span><span class="p">:</span>  <span class="n">res</span><span class="p">[</span><span class="s1">&#39;greedy&#39;</span><span class="p">][</span><span class="s1">&#39;covered&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;ls&#39;</span><span class="p">:</span>      <span class="n">res</span><span class="p">[</span><span class="s1">&#39;local_search&#39;</span><span class="p">][</span><span class="s1">&#39;covered&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;sa&#39;</span><span class="p">:</span>      <span class="n">res</span><span class="p">[</span><span class="s1">&#39;simulated_annealing&#39;</span><span class="p">][</span><span class="s1">&#39;covered&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;grasp&#39;</span><span class="p">:</span>   <span class="n">res</span><span class="p">[</span><span class="s1">&#39;grasp&#39;</span><span class="p">][</span><span class="s1">&#39;covered&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;best&#39;</span><span class="p">:</span>    <span class="n">best</span><span class="o">.</span><span class="n">num_covered</span><span class="p">,</span>
+            <span class="s1">&#39;cost&#39;</span><span class="p">:</span>    <span class="n">best</span><span class="o">.</span><span class="n">total_cost</span><span class="p">,</span>
+            <span class="s1">&#39;std_cov&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;simulated_annealing&#39;</span><span class="p">][</span><span class="s1">&#39;std_covered&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;t_greedy&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;greedy&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;t_ls&#39;</span><span class="p">:</span>     <span class="n">res</span><span class="p">[</span><span class="s1">&#39;local_search&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;t_sa&#39;</span><span class="p">:</span>     <span class="n">res</span><span class="p">[</span><span class="s1">&#39;simulated_annealing&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;t_grasp&#39;</span><span class="p">:</span>  <span class="n">res</span><span class="p">[</span><span class="s1">&#39;grasp&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+        <span class="p">})</span>
+
+    <span class="c1"># ── Construire les lignes du tableau ─────────────────────</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;Instance&#39;</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;n&#39;</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;m&#39;</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;B&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2">  &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Glouton&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;RL&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;RecSim&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;GRASP&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Meilleur&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;Coût&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;σ cov&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="n">sep_double</span> <span class="o">=</span> <span class="s1">&#39;═&#39;</span> <span class="o">*</span> <span class="mi">92</span>
+    <span class="n">sep_single</span> <span class="o">=</span> <span class="s1">&#39;─&#39;</span> <span class="o">*</span> <span class="mi">92</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="n">g</span>   <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;greedy&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">ls</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;ls&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">sa</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;sa&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">gp</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;grasp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">bst</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;best&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;instance&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;6.0f</span><span class="si">}</span><span class="s2">  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">g</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ls</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">sa</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">gp</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bst</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;8.1f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;std_cov&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;6.2f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Lignes de temps d&#39;exécution par instance</span>
+    <span class="n">time_rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="n">time_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;instance&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2">  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Glouton=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;t_greedy&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;RL=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;t_ls&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;RecSim=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;t_sa&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;GRASP=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;t_grasp&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ── Affichage terminal ────────────────────────────────────</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">sep_double</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sep_single</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sep_double</span><span class="p">)</span>
+
+    <span class="c1"># ── Écriture fichier (mode &#39;w&#39; → écrase l&#39;ancien) ────────</span>
+    <span class="n">run_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">BENCHMARK_FILE</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Benchmark — </span><span class="si">{</span><span class="n">run_time</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instances  : </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Solutions  : </span><span class="si">{</span><span class="n">output_dir</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">SOL_DIR</span><span class="si">}</span><span class="s2">/</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sep_double</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">header</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sep_single</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sep_double</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Temps d&#39;exécution par instance :</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sep_single</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">time_rows</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sep_single</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  ✓ Résultats sauvegardés : </span><span class="si">{</span><span class="n">BENCHMARK_FILE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># POINT D&#39;ENTRÉE</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="n">HELP_TEXT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Usage : python3 solution.py [OPTION] [ARGUMENT]</span>
+
+<span class="s2">Options :</span>
+<span class="s2">  &lt;fichier&gt;              Résoudre une instance et sauvegarder la solution</span>
+<span class="s2">                           Ex : python3 solution.py inst10_20_0.txt</span>
+
+<span class="s2">  --all &lt;dossier&gt;        Résoudre toutes les instances d&#39;un dossier</span>
+<span class="s2">                           Ex : python3 solution.py --all ./instances/</span>
+
+<span class="s2">  --benchmark &lt;dossier&gt;  Comme --all, mais affiche un tableau récapitulatif</span>
+<span class="s2">                         comparant Glouton / Rech. locale / Recuit simulé / GRASP</span>
+<span class="s2">                           Ex : python3 solution.py --benchmark ./instances/</span>
+
+<span class="s2">  --grasp &lt;fichier&gt;      Résoudre une instance avec GRASP uniquement</span>
+<span class="s2">                         (multidémarrage glouton randomisé + recherche locale)</span>
+<span class="s2">                           Ex : python3 solution.py --grasp inst50_30_2.txt</span>
+
+<span class="s2">  --reset-all            Supprimer le dossier de solutions (</span><span class="si">{SOL_DIR}</span><span class="s2">/)</span>
+<span class="s2">                           Ex : python3 solution.py --reset-all</span>
+
+<span class="s2">  -h, --help             Afficher ce message d&#39;aide</span>
+
+<span class="s2">Dossier de sortie :</span>
+<span class="s2">  Les fichiers de solution sont créés dans ./</span><span class="si">{SOL_DIR}</span><span class="s2">/</span>
+<span class="s2">  Format : sol_&lt;nom_instance&gt;.txt</span>
+<span class="s2">    Ligne 1 — nombre de ressources sélectionnées</span>
+<span class="s2">    Ligne 2 — indices des ressources (séparés par espaces)</span>
+
+<span class="s2">Reproductibilité :</span>
+<span class="s2">  Le recuit simulé est lancé 3 fois avec des seeds fixes (42, 43, 44).</span>
+<span class="s2">  Les résultats sont donc identiques d&#39;un run à l&#39;autre.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">SOL_DIR</span> <span class="o">=</span> <span class="s2">&quot;sol_instances&quot;</span>
+
+
+<div class="viewcode-block" id="print_help">
+<a class="viewcode-back" href="../api.html#solution.print_help">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_help</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">HELP_TEXT</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{SOL_DIR}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">SOL_DIR</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="reset_solutions">
+<a class="viewcode-back" href="../api.html#solution.reset_solutions">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reset_solutions</span><span class="p">():</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">SOL_DIR</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">SOL_DIR</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✓ Dossier &#39;</span><span class="si">{</span><span class="n">SOL_DIR</span><span class="si">}</span><span class="s2">/&#39; supprimé.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Rien à supprimer : le dossier &#39;</span><span class="si">{</span><span class="n">SOL_DIR</span><span class="si">}</span><span class="s2">/&#39; n&#39;existe pas.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--help&quot;</span><span class="p">):</span>
+        <span class="n">print_help</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;--reset-all&quot;</span><span class="p">:</span>
+        <span class="n">reset_solutions</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;--all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erreur : --all attend un dossier en argument.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Ex : python3 solution.py --all ./instances/&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;*.txt&quot;</span><span class="p">)))</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;sol_&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Aucune instance trouvée dans &#39;</span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">solve</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">SOL_DIR</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;--grasp&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erreur : --grasp attend un fichier en argument.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Ex : python3 solution.py --grasp inst50_30_2.txt&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erreur : fichier introuvable : &#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">prob</span>    <span class="o">=</span> <span class="n">Problem</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  GRASP sur </span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">instance_name</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(n=</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">n</span><span class="si">}</span><span class="s2">, m=</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2">, B=</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">B</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="n">t0</span>      <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">sol</span>     <span class="o">=</span> <span class="n">grasp</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ls_iter</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="n">pct</span>     <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">sol</span><span class="o">.</span><span class="n">num_covered</span> <span class="o">/</span> <span class="n">prob</span><span class="o">.</span><span class="n">m</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Résultat : </span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">num_covered</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2"> cibles &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)  coût=</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">  [</span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s]&quot;</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_dir</span><span class="o">=</span><span class="n">SOL_DIR</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Sauvegardé : </span><span class="si">{</span><span class="n">out</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;--benchmark&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erreur : --benchmark attend un dossier en argument.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Ex : python3 solution.py --benchmark ./instances/&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">benchmark</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">SOL_DIR</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Mode simple : un seul fichier</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Option inconnue : &#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Utilisez -h ou --help pour voir les options disponibles.&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erreur : fichier introuvable : &#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">solve</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">SOL_DIR</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2025-2026, William HERTRICH, Théo PLUVINAGE, Christophe GRILLET-AUBERT, Ludovic URBES.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

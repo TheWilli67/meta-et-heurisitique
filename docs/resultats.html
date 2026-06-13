@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Résultats expérimentaux &mdash; Couverture Maximale — Budget</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7a28dfa3"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/translations.js?v=e6b791cb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Auteurs" href="auteurs.html" />
+    <link rel="prev" title="Référence de l’API" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Couverture Maximale sous Contrainte de Budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contexte.html">Contexte et Formulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#contexte-applicatif">Contexte applicatif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#formulation-mathematique">Formulation mathématique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#format-des-instances">Format des instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexte.html#instances-de-test">Instances de test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmes.html">Algorithmes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#heuristique-constructive-gloutonne">Heuristique constructive gloutonne</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#recuit-simule-simulated-annealing">Recuit simulé (Simulated Annealing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#grasp">GRASP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithmes.html#choix-techniques">Choix techniques</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#mises-a-jour-incrementales">Mises à jour incrémentales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#index-inverse-covered-by">Index inverse <code class="docutils literal notranslate"><span class="pre">covered_by</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithmes.html#objectif-lexicographique-par-tuple">Objectif lexicographique par tuple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilisation.html">Guide d’utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#commandes-disponibles">Commandes disponibles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#resoudre-une-instance">Résoudre une instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#resoudre-toutes-les-instances">Résoudre toutes les instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#benchmark-comparatif">Benchmark comparatif</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#grasp-seul">GRASP seul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#reinitialiser-les-solutions">Réinitialiser les solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#aide">Aide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#formats-de-fichiers">Formats de fichiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#format-d-entree-instance">Format d’entrée (instance)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#format-de-sortie-solution">Format de sortie (solution)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utilisation.html#format-du-benchmark">Format du benchmark</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#reproductibilite">Reproductibilité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#structure-du-projet">Structure du projet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Référence de l’API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#structures-de-donnees">Structures de données</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#algorithmes">Algorithmes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#pipeline-principal">Pipeline principal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utilitaires-cli">Utilitaires CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#resume-des-complexites">Résumé des complexités</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Résultats expérimentaux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#conditions-d-experimentation">Conditions d’expérimentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tableau-de-synthese">Tableau de synthèse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#analyse-par-algorithme">Analyse par algorithme</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heuristique-gloutonne">Heuristique gloutonne</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recherche-locale">Recherche locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recuit-simule">Recuit simulé</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grasp">GRASP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Référence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auteurs.html">Auteurs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auteurs.html#equipe">Équipe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auteurs.html#contexte-academique">Contexte académique</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Couverture Maximale sous Contrainte de Budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Résultats expérimentaux</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/resultats.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="resultats-experimentaux">
+<span id="resultats"></span><h1>Résultats expérimentaux<a class="headerlink" href="#resultats-experimentaux" title="Lien vers cette rubrique"></a></h1>
+<section id="conditions-d-experimentation">
+<h2>Conditions d’expérimentation<a class="headerlink" href="#conditions-d-experimentation" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><p><strong>Machine</strong> : exécution locale, Python 3.8+</p></li>
+<li><p><strong>Seeds</strong> : fixes (42, 43, 44 pour le recuit simulé ; 42 pour GRASP)</p></li>
+<li><p><strong>Reproductibilité</strong> : résultats identiques à chaque exécution</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>L’écart-type de couverture (σ cov) est <strong>0.00</strong> sur toutes les instances
+pour les 3 runs du recuit simulé, confirmant la stabilité des algorithmes.</p>
+</div>
+</section>
+<section id="tableau-de-synthese">
+<h2>Tableau de synthèse<a class="headerlink" href="#tableau-de-synthese" title="Lien vers cette rubrique"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24.2%" />
+<col style="width: 5.5%" />
+<col style="width: 5.5%" />
+<col style="width: 6.6%" />
+<col style="width: 9.9%" />
+<col style="width: 9.9%" />
+<col style="width: 9.9%" />
+<col style="width: 9.9%" />
+<col style="width: 9.9%" />
+<col style="width: 8.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>n</p></th>
+<th class="head"><p>m</p></th>
+<th class="head"><p>B</p></th>
+<th class="head"><p>Glouton</p></th>
+<th class="head"><p>Rech. locale</p></th>
+<th class="head"><p>Rec. simulé</p></th>
+<th class="head"><p>GRASP</p></th>
+<th class="head"><p><strong>Meilleur</strong></p></th>
+<th class="head"><p>Coût</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inst10_20_0</span></code></p></td>
+<td><p>10</p></td>
+<td><p>20</p></td>
+<td><p>80</p></td>
+<td><p>20/20</p></td>
+<td><p>20/20</p></td>
+<td><p>20/20</p></td>
+<td><p>20/20</p></td>
+<td><p><strong>20/20</strong></p></td>
+<td><p>62.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inst15_30_0</span></code></p></td>
+<td><p>15</p></td>
+<td><p>30</p></td>
+<td><p>120</p></td>
+<td><p>30/30</p></td>
+<td><p>30/30</p></td>
+<td><p>30/30</p></td>
+<td><p>30/30</p></td>
+<td><p><strong>30/30</strong></p></td>
+<td><p>95.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inst20_30_1</span></code></p></td>
+<td><p>20</p></td>
+<td><p>30</p></td>
+<td><p>150</p></td>
+<td><p>30/30</p></td>
+<td><p>30/30</p></td>
+<td><p>30/30</p></td>
+<td><p>30/30</p></td>
+<td><p><strong>30/30</strong></p></td>
+<td><p>106.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inst20_40_0</span></code></p></td>
+<td><p>20</p></td>
+<td><p>40</p></td>
+<td><p>140</p></td>
+<td><p>40/40</p></td>
+<td><p>40/40</p></td>
+<td><p>40/40</p></td>
+<td><p>40/40</p></td>
+<td><p><strong>40/40</strong></p></td>
+<td><p>104.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inst30_50_1</span></code></p></td>
+<td><p>30</p></td>
+<td><p>50</p></td>
+<td><p>150</p></td>
+<td><p>50/50</p></td>
+<td><p>50/50</p></td>
+<td><p>50/50</p></td>
+<td><p>50/50</p></td>
+<td><p><strong>50/50</strong></p></td>
+<td><p>92.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inst30_80_0</span></code></p></td>
+<td><p>30</p></td>
+<td><p>80</p></td>
+<td><p>240</p></td>
+<td><p>80/80</p></td>
+<td><p>80/80</p></td>
+<td><p>80/80</p></td>
+<td><p>80/80</p></td>
+<td><p><strong>80/80</strong></p></td>
+<td><p>168.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inst50_30_2</span></code> ⚠️</p></td>
+<td><p>50</p></td>
+<td><p>30</p></td>
+<td><p>200</p></td>
+<td><p>29/30</p></td>
+<td><p>29/30</p></td>
+<td><p>29/30</p></td>
+<td><p>29/30</p></td>
+<td><p><strong>29/30</strong></p></td>
+<td><p>175.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inst50_80_1</span></code></p></td>
+<td><p>50</p></td>
+<td><p>80</p></td>
+<td><p>250</p></td>
+<td><p>80/80</p></td>
+<td><p>80/80</p></td>
+<td><p>80/80</p></td>
+<td><p>80/80</p></td>
+<td><p><strong>80/80</strong></p></td>
+<td><p>133.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inst60_90_1</span></code></p></td>
+<td><p>60</p></td>
+<td><p>90</p></td>
+<td><p>250</p></td>
+<td><p>90/90</p></td>
+<td><p>90/90</p></td>
+<td><p>90/90</p></td>
+<td><p>90/90</p></td>
+<td><p><strong>90/90</strong></p></td>
+<td><p>99.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inst70_40_2</span></code></p></td>
+<td><p>70</p></td>
+<td><p>40</p></td>
+<td><p>200</p></td>
+<td><p>40/40</p></td>
+<td><p>40/40</p></td>
+<td><p>40/40</p></td>
+<td><p>40/40</p></td>
+<td><p><strong>40/40</strong></p></td>
+<td><p>187.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inst90_50_2</span></code></p></td>
+<td><p>90</p></td>
+<td><p>50</p></td>
+<td><p>270</p></td>
+<td><p>49/50</p></td>
+<td><p>50/50</p></td>
+<td><p>50/50</p></td>
+<td><p>50/50</p></td>
+<td><p><strong>50/50</strong></p></td>
+<td><p>244.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inst150_120_2</span></code></p></td>
+<td><p>150</p></td>
+<td><p>120</p></td>
+<td><p>450</p></td>
+<td><p>120/120</p></td>
+<td><p>120/120</p></td>
+<td><p>120/120</p></td>
+<td><p>120/120</p></td>
+<td><p><strong>120/120</strong></p></td>
+<td><p>228.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <code class="docutils literal notranslate"><span class="pre">inst50_30_2</span></code> : la cible manquante est mathématiquement inatteignable avec
+le budget disponible, quelle que soit la combinaison de ressources choisie.
+29/30 est donc l”<strong>optimum global</strong> pour cette instance.</p>
+</section>
+<section id="analyse-par-algorithme">
+<h2>Analyse par algorithme<a class="headerlink" href="#analyse-par-algorithme" title="Lien vers cette rubrique"></a></h2>
+<section id="heuristique-gloutonne">
+<h3>Heuristique gloutonne<a class="headerlink" href="#heuristique-gloutonne" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p><strong>10/12 instances</strong> couvertes à 100 % dès la phase gloutonne.</p></li>
+<li><p>Échec partiel sur <code class="docutils literal notranslate"><span class="pre">inst50_30_2</span></code> (29/30) et <code class="docutils literal notranslate"><span class="pre">inst90_50_2</span></code> (49/50).</p></li>
+<li><p>Temps de calcul : &lt; 10 ms par instance.</p></li>
+<li><p>Avantage : très rapide, sert de base aux autres algorithmes.</p></li>
+</ul>
+</section>
+<section id="recherche-locale">
+<h3>Recherche locale<a class="headerlink" href="#recherche-locale" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p>Corrige l’échec du glouton sur <code class="docutils literal notranslate"><span class="pre">inst90_50_2</span></code> : passe de 49/50 à <strong>50/50</strong>.</p></li>
+<li><p>N’apporte aucune amélioration sur les instances déjà résolues à 100 %.</p></li>
+<li><p>Améliore systématiquement le coût (critère secondaire) via les mouvements REMOVE.</p></li>
+</ul>
+</section>
+<section id="recuit-simule">
+<h3>Recuit simulé<a class="headerlink" href="#recuit-simule" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p>Résultats identiques à la recherche locale sur toutes les instances de ce jeu.</p></li>
+<li><p>Écart-type <strong>0.00</strong> sur les 3 runs (seeds 42, 43, 44) : grande stabilité.</p></li>
+<li><p>Apport potentiel sur des instances plus difficiles où la RL reste bloquée
+dans un optimum local.</p></li>
+</ul>
+</section>
+<section id="grasp">
+<h3>GRASP<a class="headerlink" href="#grasp" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p>Égale les meilleurs résultats sur toutes les instances.</p></li>
+<li><p><strong>Apport principal : réduction du coût</strong> (critère secondaire) sur les grandes instances :</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">inst150_120_2</span></code> : coût GRASP = 228 vs RecSim = 252 (économie de 24 unités)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inst30_80_0</span></code> : coût GRASP = 168 vs RecSim = 175 (économie de 7 unités)</p></li>
+</ul>
+</li>
+<li><p>Temps de calcul comparable au recuit simulé.</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Le glouton seul</strong> est suffisant pour 10/12 instances — ce qui reflète la
+structure favorable du jeu de données (couvertures larges, budgets généreux).</p></li>
+<li><p><strong>La recherche locale</strong> apporte un correctif décisif sur <code class="docutils literal notranslate"><span class="pre">inst90_50_2</span></code>
+et améliore systématiquement le coût via l’élimination des redondances.</p></li>
+<li><p><strong>Les métaheuristiques</strong> (RecSim et GRASP) n’améliorent pas la couverture
+sur ce jeu, mais GRASP réduit le coût sur les grandes instances,
+démontrant la valeur du multidémarrage pour le critère secondaire.</p></li>
+<li><p><strong>inst50_30_2</strong> est mathématiquement non-résoluble à 100 %, confirmant que
+le budget B=200 ne permet pas de couvrir les 30 cibles avec les ressources
+disponibles.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="api.html" class="btn btn-neutral float-left" title="Référence de l’API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="auteurs.html" class="btn btn-neutral float-right" title="Auteurs" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2025-2026, William HERTRICH, Théo PLUVINAGE, Christophe GRILLET-AUBERT, Ludovic URBES.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

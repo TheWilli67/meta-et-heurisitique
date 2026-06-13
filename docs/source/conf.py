@@ -19,16 +19,23 @@ templates_path = ['_templates']
 exclude_patterns = []
 language = 'fr'
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 html_static_path = []
-html_title = 'Couverture Maximale — Budget'
+html_title = 'Couverture Maximale sous Contrainte de Budget'
 html_short_title = 'CouvertureMax'
 
 html_theme_options = {
-    'navigation_depth': 4,
-    'collapse_navigation': False,
-    'sticky_navigation': True,
-    'titles_only': False,
+    "sidebar_hide_name": False,
+    "navigation_with_keys": True,
+    "light_css_variables": {
+        "color-brand-primary": "#1a6fa8",
+        "color-brand-content": "#1a6fa8",
+        "color-admonition-background": "rgba(26, 111, 168, 0.05)",
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#5dade2",
+        "color-brand-content": "#5dade2",
+    },
 }
 
 autodoc_default_options = {
